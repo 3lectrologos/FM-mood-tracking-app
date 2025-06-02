@@ -1,5 +1,12 @@
+import { Button } from '@/components/ui/button'
+
 export default function Home() {
   return (
-    <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20"></div>
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-y-4">
+      <Button className="txt-preset-5">Sign Up</Button>
+      <Button className="txt-preset-5" disabled>
+        Sign Up
+      </Button>
+    </div>
   )
 }

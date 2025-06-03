@@ -10,7 +10,7 @@ export default function AverageDisplay({
   sleepData: AverageSleep
 }) {
   return (
-    <div className="flex w-full flex-col gap-y-300 rounded-16 border border-blue-100 bg-neutral-0 px-200 py-250">
+    <div className="flex flex-col gap-y-300 self-stretch rounded-16 border border-blue-100 bg-neutral-0 px-200 py-250">
       <AverageTitleAndBox data={moodData} />
       <AverageTitleAndBox data={sleepData} />
     </div>

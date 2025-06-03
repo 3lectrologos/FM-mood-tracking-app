@@ -7,7 +7,7 @@ export default function UserAvatar() {
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
         <Placeholder />
       </div>
-      <DropdownArrow className="w-2.5" />
+      <DropdownArrow className="w-[11px]" />
     </div>
   )
 }

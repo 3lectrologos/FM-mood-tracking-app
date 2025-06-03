@@ -1,4 +1,4 @@
-import { AverageMood } from '@/types'
+import { AverageData, AverageMood, AverageSleep } from '@/types'
 import AverageBox from '@/components/AverageBox'
 import Spacer from '@/components/Spacer'
 
@@ -25,7 +25,7 @@ export function AverageTitleAndBox({ data }: { data: AverageData }) {
           Average {data.type === 'mood' ? 'Mood' : 'Sleep'}
         </span>
         <span className="txt-preset-7 text-neutral-600">
-          (Last 5 Check-ins)
+          (Last 5 check-ins)
         </span>
       </div>
       <Spacer className="h-150" />

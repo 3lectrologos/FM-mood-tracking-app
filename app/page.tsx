@@ -4,6 +4,7 @@ import MoodLogPrompt from '@/components/MoodLogPrompt'
 import AverageDisplay from '@/components/AverageDisplay'
 import { AverageMood, AverageSleep, DataPoint } from '@/types'
 import TrendsDisplay from '@/components/TrendsDisplay'
+import { format, subDays } from 'date-fns'
 
 export default function Home() {
   const moodData: AverageMood = {
@@ -18,12 +19,23 @@ export default function Home() {
   }
 
   const data: DataPoint[] = [
-    { date: '2025-04-11', mood: 'sad', sleep: '3-4' },
-    { date: '2025-04-12', mood: 'neutral', sleep: '7-8' },
-    { date: '2025-04-13', mood: 'happy', sleep: '7-8' },
-    { date: '2025-04-14', mood: 'very sad', sleep: '3-4' },
-    { date: '2025-04-15', mood: 'very happy', sleep: '9+' },
+    { date: '2025-06-16', mood: 'sad', sleep: '3-4' },
+    { date: '2025-06-18', mood: 'neutral', sleep: '7-8' },
+    { date: '2025-06-20', mood: 'happy', sleep: '7-8' },
+    { date: '2025-06-21', mood: 'very sad', sleep: '3-4' },
+    { date: '2025-06-22', mood: 'very happy', sleep: '9+' },
   ]
+
+  const numRecentDays = 14
+  const today = new Date()
+  const recentData = Array.from({ length: numRecentDays }, (_, i) =>
+    subDays(today, numRecentDays - 1 - i)
+  )
+    .map((date) => format(date, 'yyyy-MM-dd'))
+    .map((date) => {
+      const point = data.find((d) => d.date === date)
+      return point || { date, mood: undefined, sleep: undefined }
+    })
 
   return (
     <div className="flex min-h-dvh flex-col items-center px-200 pt-400 pb-1000">
@@ -33,7 +45,7 @@ export default function Home() {
       <Spacer className="h-800" />
       <AverageDisplay moodData={moodData} sleepData={sleepData} />
       <Spacer className="h-400" />
-      <TrendsDisplay data={data} />
+      <TrendsDisplay data={recentData} />
     </div>
   )
 }

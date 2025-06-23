@@ -1,3 +1,5 @@
+'use client'
+
 import IconVeryHappy from '@/assets/images/icon-very-happy-white.svg'
 import IconHappy from '@/assets/images/icon-happy-white.svg'
 import IconNeutral from '@/assets/images/icon-neutral-white.svg'
@@ -5,9 +7,18 @@ import IconSad from '@/assets/images/icon-sad-white.svg'
 import IconVerySad from '@/assets/images/icon-very-sad-white.svg'
 import IconSleep from '@/assets/images/icon-sleep.svg'
 import { DataPoint, sleepValues } from '@/types'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { useEffect, useRef } from 'react'
 
 export default function TrendsDisplay({ data }: { data: DataPoint[] }) {
+  const graphRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (graphRef.current) {
+      const scrollWidth = graphRef.current.scrollWidth
+      graphRef.current.scrollLeft = scrollWidth - graphRef.current.clientWidth
+    }
+  }, [])
+
   return (
     <div className="flex flex-col gap-y-300 self-stretch rounded-16 border border-blue-100 bg-neutral-0 px-200 py-250">
       <span className="txt-preset-3">Mood and sleep trends</span>
@@ -23,15 +34,16 @@ export default function TrendsDisplay({ data }: { data: DataPoint[] }) {
               </div>
             ))}
         </div>
-        <ScrollArea className="w-1 flex-1 pt-1.5">
-          <div className="absolute top-0 left-0 flex w-full flex-col gap-y-[51px] pt-1.5">
-            {sleepValues.map((value) => (
-              <div key={value} className="h-px w-full bg-blue-100/30" />
-            ))}
+        <div className="flex-1 overflow-x-auto" ref={graphRef}>
+          <div className="relative min-w-max pt-1.5 pb-0.5">
+            <div className="absolute top-0 left-0 flex w-full flex-col gap-y-[51px] pt-1.5">
+              {sleepValues.map((value) => (
+                <div key={value} className="h-px w-full bg-blue-100/30" />
+              ))}
+            </div>
+            <TrendsGraph data={data} />
           </div>
-          <TrendsGraph data={data} />
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+        </div>
       </div>
     </div>
   )
@@ -51,34 +63,45 @@ function TrendsGraph({ data }: { data: DataPoint[] }) {
 }
 
 function GraphBar({ sleep, mood }: DataPoint) {
-  const sleepHeight = {
-    '0-2': 'h-[52px]',
-    '3-4': 'h-[104px]',
-    '5-6': 'h-[156px]',
-    '7-8': 'h-[208px]',
-    '9+': 'h-[260px]',
-  }[sleep]
+  const sleepHeight =
+    sleep === undefined
+      ? 'h-0'
+      : {
+          '0-2': 'h-[52px]',
+          '3-4': 'h-[104px]',
+          '5-6': 'h-[156px]',
+          '7-8': 'h-[208px]',
+          '9+': 'h-[260px]',
+        }[sleep]
 
-  const moodColor = {
-    'very sad': 'bg-red-300',
-    sad: 'bg-violet-300',
-    neutral: 'bg-blue-300',
-    happy: 'bg-green-300',
-    'very happy': 'bg-amber-300',
-  }[mood]
+  const moodColor =
+    mood === undefined
+      ? 'bg-neutral-200'
+      : {
+          'very sad': 'bg-red-300',
+          sad: 'bg-violet-300',
+          neutral: 'bg-blue-300',
+          happy: 'bg-green-300',
+          'very happy': 'bg-amber-300',
+        }[mood]
 
-  const icon = {
-    'very sad': <IconVerySad />,
-    sad: <IconSad />,
-    neutral: <IconNeutral />,
-    happy: <IconHappy />,
-    'very happy': <IconVeryHappy />,
-  }[mood]
+  const icon =
+    mood === undefined
+      ? null
+      : {
+          'very sad': <IconVerySad />,
+          sad: <IconSad />,
+          neutral: <IconNeutral />,
+          happy: <IconHappy />,
+          'very happy': <IconVeryHappy />,
+        }[mood]
 
   return (
-    <div className={`relative w-10 ${sleepHeight} ${moodColor} rounded-full`}>
-      <div className="absolute top-1.5 left-1/2 flex h-[30px] w-[30px] -translate-x-1/2">
-        {icon}
+    <div className="flex h-[260px] flex-col justify-end">
+      <div className={`relative w-10 ${sleepHeight} ${moodColor} rounded-full`}>
+        <div className="absolute top-1.5 left-1/2 flex h-[30px] w-[30px] -translate-x-1/2">
+          {icon}
+        </div>
       </div>
     </div>
   )

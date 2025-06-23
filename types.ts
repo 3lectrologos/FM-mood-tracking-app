@@ -13,8 +13,8 @@ export type Sleep = (typeof sleepValues)[number]
 
 export type DataPoint = {
   date: string
-  mood: Mood
-  sleep: Sleep
+  mood?: Mood
+  sleep?: Sleep
 }
 
 export type AverageMood = {

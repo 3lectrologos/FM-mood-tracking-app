@@ -19,6 +19,7 @@ export default function Home() {
   }
 
   const data: DataPoint[] = [
+    { date: '2025-06-15', mood: 'very sad', sleep: '0-2' },
     { date: '2025-06-16', mood: 'sad', sleep: '3-4' },
     { date: '2025-06-18', mood: 'neutral', sleep: '7-8' },
     { date: '2025-06-20', mood: 'happy', sleep: '7-8' },

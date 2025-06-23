@@ -35,7 +35,7 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-tablet: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
@@ -100,6 +100,9 @@
   --radius-full: 999px;
 
   --background-image-light-gradient: linear-gradient(180deg, #F5F5FF 72.99%, #E0E0FF 100%);
+
+  --breakpoint-tablet: 640px;
+  --breakpoint-desktop: 14440px;
 }
 
 :root {
@@ -184,17 +187,17 @@
 
 @utility txt-preset-1 {
   @apply text-[46px]/[120%] tracking-[-2px] font-bold;
-  @apply sm:text-[52px]/[140%] sm:tracking-[-2px] sm:font-bold;
+  @apply tablet:text-[52px]/[140%] tablet:tracking-[-2px] tablet:font-bold;
 }
 
 @utility txt-preset-2 {
   @apply text-[32px]/[120%] tracking-[-0.3px] font-bold;
-  @apply sm:text-[40px]/[120%] sm:tracking-[-0.3px] sm:font-bold;
+  @apply tablet:text-[40px]/[120%] tablet:tracking-[-0.3px] tablet:font-bold;
 }
 
 @utility txt-preset-3 {
   @apply text-[28px]/[130%] tracking-[-0.3px] font-bold;
-  @apply sm:text-[32px]/[140%] sm:tracking-[-0.3px] sm:font-bold;
+  @apply tablet:text-[32px]/[140%] tablet:tracking-[-0.3px] tablet:font-bold;
 }
 
 @utility txt-preset-4 {

@@ -19,12 +19,12 @@ export default function Home() {
   }
 
   const data: DataPoint[] = [
-    { date: '2025-06-15', mood: 'very sad', sleep: '0-2' },
-    { date: '2025-06-16', mood: 'sad', sleep: '3-4' },
-    { date: '2025-06-18', mood: 'neutral', sleep: '7-8' },
-    { date: '2025-06-20', mood: 'happy', sleep: '7-8' },
-    { date: '2025-06-21', mood: 'very sad', sleep: '3-4' },
-    { date: '2025-06-22', mood: 'very happy', sleep: '9+' },
+    { date: '2025-06-26', mood: 'very sad', sleep: '0-2' },
+    { date: '2025-06-28', mood: 'sad', sleep: '3-4' },
+    { date: '2025-07-01', mood: 'neutral', sleep: '7-8' },
+    { date: '2025-07-05', mood: 'happy', sleep: '7-8' },
+    { date: '2025-07-06', mood: 'very sad', sleep: '3-4' },
+    { date: '2025-07-07', mood: 'very happy', sleep: '9+' },
   ]
 
   const numRecentDays = 14

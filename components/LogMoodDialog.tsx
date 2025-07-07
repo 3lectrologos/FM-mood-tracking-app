@@ -6,6 +6,7 @@ import {
 } from '@/components/ui/dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { Button } from '@/components/ui/button'
+import MoodRadioGroup from '@/components/MoodRadioGroup'
 
 export default function LogMoodDialog() {
   return (
@@ -43,6 +44,7 @@ function MoodForm() {
       <label htmlFor="mood" className="txt-preset-3">
         How was your mood today?
       </label>
+      <MoodRadioGroup />
       <Button variant="large">Continue</Button>
     </form>
   )

@@ -8,6 +8,7 @@ import IconVerySad from '@/assets/images/icon-very-sad-white.svg'
 import IconSleep from '@/assets/images/icon-sleep.svg'
 import { DataPoint, sleepValues } from '@/types'
 import { useEffect, useRef } from 'react'
+import { getMoodIcon } from '@/lib/utils'
 
 export default function TrendsDisplay({ data }: { data: DataPoint[] }) {
   const graphRef = useRef<HTMLDivElement>(null)
@@ -85,22 +86,13 @@ function GraphBar({ sleep, mood }: DataPoint) {
           'very happy': 'bg-amber-300',
         }[mood]
 
-  const icon =
-    mood === undefined
-      ? null
-      : {
-          'very sad': <IconVerySad />,
-          sad: <IconSad />,
-          neutral: <IconNeutral />,
-          happy: <IconHappy />,
-          'very happy': <IconVeryHappy />,
-        }[mood]
+  const Icon = mood && getMoodIcon(mood, 'white')
 
   return (
     <div className="flex h-[260px] flex-col justify-end">
       <div className={`relative w-10 ${sleepHeight} ${moodColor} rounded-full`}>
         <div className="absolute top-1.5 left-1/2 flex h-[30px] w-[30px] -translate-x-1/2">
-          {icon}
+          {Icon && <Icon />}
         </div>
       </div>
     </div>

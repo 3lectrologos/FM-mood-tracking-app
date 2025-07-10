@@ -5,8 +5,34 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-import { Button } from '@/components/ui/button'
-import MoodRadioGroup from '@/components/MoodRadioGroup'
+import MoodForm, { ActionState } from '@/components/MoodForm'
+import { logSchema } from '@/schemas/log'
+
+async function moodAction(
+  state: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  'use server'
+  console.log('Mood action triggered with state:', state, formData)
+  const mood = formData.get('mood')
+  const { error } = logSchema.safeParse({ mood })
+  const errors: ActionState['errors'] = {}
+  if (error) {
+    error.issues.forEach((issue) => {
+      errors[issue.path.join('.')] = { message: issue.message }
+    })
+  }
+
+  console.log('Mood logged:', mood)
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        values: state.values,
+        errors,
+      })
+    }, 1000)
+  })
+}
 
 export default function LogMoodDialog() {
   return (
@@ -17,7 +43,7 @@ export default function LogMoodDialog() {
           <DialogDescription>Log your mood</DialogDescription>
         </VisuallyHidden>
         <Progress value={1} />
-        <MoodForm />
+        <MoodForm action={moodAction} initValues={{ mood: 'neutral' }} />
       </DialogHeader>
     </DialogContent>
   )
@@ -35,17 +61,5 @@ function Progress({ value }: { value: number }) {
         />
       ))}
     </div>
-  )
-}
-
-function MoodForm() {
-  return (
-    <form className="flex flex-col gap-y-300">
-      <label htmlFor="mood" className="txt-preset-3">
-        How was your mood today?
-      </label>
-      <MoodRadioGroup />
-      <Button variant="large">Continue</Button>
-    </form>
   )
 }

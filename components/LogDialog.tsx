@@ -35,7 +35,7 @@ export default function LogDialog() {
         <Button>{"Log today's mood"}</Button>
       </DialogTrigger>
       <DialogContent
-        onCloseAutoFocus={handleClose}
+        onAnimationEnd={handleClose}
         className="rounded-16 bg-light-gradient px-250 py-400 tablet:w-[600px] tablet:px-500 tablet:py-600"
       >
         <DialogHeader className="flex flex-col gap-y-400">

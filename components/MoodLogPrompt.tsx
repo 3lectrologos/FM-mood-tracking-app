@@ -1,12 +1,13 @@
 import Spacer from '@/components/Spacer'
-import { Button } from '@/components/ui/button'
 import { formatDate } from 'date-fns'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import LogDialog from '@/components/LogDialog'
 
 export default function MoodLogPrompt() {
   const name = 'Lisa'
   const date = formatDate(new Date(), 'EEEE, MMMM do, yyyy')
+
+  // TODO: Eventually, should fetch any existing mood or sleep data to prefill the LogDialog forms
+
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-col items-center gap-y-200">
@@ -17,12 +18,7 @@ export default function MoodLogPrompt() {
         <span className="txt-preset-6 text-neutral-600">{date}</span>
       </div>
       <Spacer className="h-600" />
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button>{"Log today's mood"}</Button>
-        </DialogTrigger>
-        <LogDialog />
-      </Dialog>
+      <LogDialog />
     </div>
   )
 }

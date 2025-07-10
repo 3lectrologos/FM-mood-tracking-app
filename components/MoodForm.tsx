@@ -1,44 +1,24 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
 import { Mood, moodValues } from '@/types'
-import { useActionState } from 'react'
-import Form from 'next/form'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { moodSchema } from '@/schemas/log'
-import { FormField, FormItem } from '@/components/ui/form'
+import { Form, FormField, FormItem } from '@/components/ui/form'
 import { CustomRadioGroup } from '@/components/CustomRadioGroup'
 import { getMoodIcon } from '@/lib/utils'
-
-export type MoodActionState = {
-  errors: Record<string, { message: string }>
-  values: { mood: Mood }
-}
-
-type MoodActionType = (
-  state: MoodActionState,
-  formData: FormData
-) => Promise<MoodActionState>
 
 const resolver = zodResolver(moodSchema)
 
 export default function MoodForm({
-  action,
+  onComplete,
   initValues,
 }: {
-  action: MoodActionType
+  onComplete: (data: { mood: Mood }) => void
   initValues: { mood: Mood }
 }) {
-  const [state, formAction, isPending] = useActionState(action, {
-    values: initValues,
-    errors: {},
-  })
-
-  const { control } = useForm({
+  const form = useForm({
     mode: 'onBlur',
-    values: state.values,
-    errors: state.errors,
+    defaultValues: initValues,
     resolver,
   })
 
@@ -48,28 +28,32 @@ export default function MoodForm({
   }))
 
   return (
-    <Form action={formAction} className="flex flex-col gap-y-300">
-      <FormField
-        name="mood"
-        control={control}
-        render={({ field }) => (
-          <FormItem>
-            <label htmlFor="mood" className="txt-preset-3">
-              How was your mood today?
-            </label>
-            <CustomRadioGroup
-              entries={moodRadioEntries}
-              value={field.value}
-              onValueChange={field.onChange}
-              disabled={isPending}
-            />
-            <input type="hidden" name="mood" value={field.value} />
-          </FormItem>
-        )}
-      />
-      <Button variant="large" disabled={isPending}>
-        Continue
-      </Button>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit((data) => onComplete(data))}
+        className="flex flex-col gap-y-300"
+      >
+        <FormField
+          name="mood"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <label htmlFor="mood" className="txt-preset-3">
+                How was your mood today?
+              </label>
+              <CustomRadioGroup
+                entries={moodRadioEntries}
+                value={field.value}
+                onValueChange={field.onChange}
+              />
+              <input type="hidden" name="mood" value={field.value} />
+            </FormItem>
+          )}
+        />
+        <Button variant="large" type="submit">
+          Continue
+        </Button>
+      </form>
     </Form>
   )
 }

@@ -2,7 +2,7 @@ import Spacer from '@/components/Spacer'
 import { Button } from '@/components/ui/button'
 import { formatDate } from 'date-fns'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
-import LogMoodDialog from '@/components/LogMoodDialog'
+import LogDialog from '@/components/LogDialog'
 
 export default function MoodLogPrompt() {
   const name = 'Lisa'
@@ -21,7 +21,7 @@ export default function MoodLogPrompt() {
         <DialogTrigger asChild>
           <Button>{"Log today's mood"}</Button>
         </DialogTrigger>
-        <LogMoodDialog />
+        <LogDialog />
       </Dialog>
     </div>
   )

@@ -1,34 +1,33 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Mood, moodValues } from '@/types'
+import { Sleep, sleepValues } from '@/types'
 import { useActionState } from 'react'
 import Form from 'next/form'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { moodSchema } from '@/schemas/log'
 import { FormField, FormItem } from '@/components/ui/form'
 import { CustomRadioGroup } from '@/components/CustomRadioGroup'
-import { getMoodIcon } from '@/lib/utils'
+import { sleepSchema } from '@/schemas/log'
 
-export type MoodActionState = {
+export type SleepActionState = {
   errors: Record<string, { message: string }>
-  values: { mood: Mood }
+  values: { sleep: Sleep }
 }
 
-type MoodActionType = (
-  state: MoodActionState,
+type SleepActionType = (
+  state: SleepActionState,
   formData: FormData
-) => Promise<MoodActionState>
+) => Promise<SleepActionState>
 
-const resolver = zodResolver(moodSchema)
+const resolver = zodResolver(sleepSchema)
 
-export default function MoodForm({
+export default function SleepForm({
   action,
   initValues,
 }: {
-  action: MoodActionType
-  initValues: { mood: Mood }
+  action: SleepActionType
+  initValues: { sleep: Sleep }
 }) {
   const [state, formAction, isPending] = useActionState(action, {
     values: initValues,
@@ -42,28 +41,28 @@ export default function MoodForm({
     resolver,
   })
 
-  const moodRadioEntries = [...moodValues].reverse().map((value) => ({
+  const sleepRadioEntries = [...sleepValues].reverse().map((value) => ({
     value,
-    icon: getMoodIcon(value),
+    label: `${value} hours`,
   }))
 
   return (
     <Form action={formAction} className="flex flex-col gap-y-300">
       <FormField
-        name="mood"
+        name="sleep"
         control={control}
         render={({ field }) => (
           <FormItem>
-            <label htmlFor="mood" className="txt-preset-3">
-              How was your mood today?
+            <label htmlFor="sleep" className="txt-preset-3">
+              How many hours did you sleep last night?
             </label>
             <CustomRadioGroup
-              entries={moodRadioEntries}
+              entries={sleepRadioEntries}
               value={field.value}
               onValueChange={field.onChange}
               disabled={isPending}
             />
-            <input type="hidden" name="mood" value={field.value} />
+            <input type="hidden" name="sleep" value={field.value} />
           </FormItem>
         )}
       />

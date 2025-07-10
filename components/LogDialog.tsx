@@ -5,18 +5,19 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-import MoodForm, { ActionState } from '@/components/MoodForm'
-import { logSchema } from '@/schemas/log'
+import MoodForm, { MoodActionState } from '@/components/MoodForm'
+import { moodSchema } from '@/schemas/log'
+import SleepForm, { SleepActionState } from '@/components/SleepForm'
 
 async function moodAction(
-  state: ActionState,
+  state: MoodActionState,
   formData: FormData
-): Promise<ActionState> {
+): Promise<MoodActionState> {
   'use server'
   console.log('Mood action triggered with state:', state, formData)
   const mood = formData.get('mood')
-  const { error } = logSchema.safeParse({ mood })
-  const errors: ActionState['errors'] = {}
+  const { error } = moodSchema.safeParse({ mood })
+  const errors: MoodActionState['errors'] = {}
   if (error) {
     error.issues.forEach((issue) => {
       errors[issue.path.join('.')] = { message: issue.message }
@@ -34,7 +35,33 @@ async function moodAction(
   })
 }
 
-export default function LogMoodDialog() {
+async function sleepAction(
+  state: SleepActionState,
+  formData: FormData
+): Promise<SleepActionState> {
+  'use server'
+  console.log('Sleep action triggered with state:', state, formData)
+  const sleep = formData.get('sleep')
+  const { error } = moodSchema.safeParse({ sleep })
+  const errors: SleepActionState['errors'] = {}
+  if (error) {
+    error.issues.forEach((issue) => {
+      errors[issue.path.join('.')] = { message: issue.message }
+    })
+  }
+
+  console.log('Sleep logged:', sleep)
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        values: state.values,
+        errors,
+      })
+    }, 1000)
+  })
+}
+
+export default function LogDialog() {
   return (
     <DialogContent className="rounded-16 bg-light-gradient px-250 py-400 tablet:w-[600px] tablet:px-500 tablet:py-600">
       <DialogHeader className="flex flex-col gap-y-400">
@@ -43,7 +70,8 @@ export default function LogMoodDialog() {
           <DialogDescription>Log your mood</DialogDescription>
         </VisuallyHidden>
         <Progress value={1} />
-        <MoodForm action={moodAction} initValues={{ mood: 'neutral' }} />
+        {/*<MoodForm action={moodAction} initValues={{ mood: 'neutral' }} />*/}
+        <SleepForm action={sleepAction} initValues={{ sleep: '7-8' }} />
       </DialogHeader>
     </DialogContent>
   )

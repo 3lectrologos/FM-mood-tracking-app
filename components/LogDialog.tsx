@@ -13,21 +13,12 @@ import SleepForm from '@/components/forms/SleepForm'
 import { useState } from 'react'
 import MoodForm from '@/components/forms/MoodForm'
 import { Button } from '@/components/ui/button'
-import { MoodDataType, SleepDataType } from '@/schemas/form'
+import TagsForm from '@/components/forms/TagsForm'
 
-type Step = 1 | 2
+type Step = 1 | 2 | 3
 
 export default function LogDialog() {
   const [step, setStep] = useState<Step>(1)
-
-  function handleMoodComplete(data: MoodDataType) {
-    console.log('Mood logged:', data.mood)
-    setStep(2)
-  }
-
-  function handleSleepComplete(data: SleepDataType) {
-    console.log('Sleep logged:', data.sleep)
-  }
 
   function handleClose() {
     setStep(1)
@@ -50,15 +41,15 @@ export default function LogDialog() {
           <Progress step={step} />
           {step === 1 && (
             <MoodForm
-              onComplete={handleMoodComplete}
+              onComplete={() => setStep(2)}
               initValues={{ mood: 'neutral' }}
             />
           )}
           {step === 2 && (
-            <SleepForm
-              onComplete={handleSleepComplete}
-              initValues={{ sleep: '7-8' }}
-            />
+            <TagsForm onComplete={() => setStep(3)} initValues={{ tags: [] }} />
+          )}
+          {step === 3 && (
+            <SleepForm onComplete={() => {}} initValues={{ sleep: '7-8' }} />
           )}
         </DialogHeader>
       </DialogContent>

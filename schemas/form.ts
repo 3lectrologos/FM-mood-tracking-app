@@ -13,6 +13,19 @@ export const tagsSchema = z.object({
 })
 export type TagsDataType = z.infer<typeof tagsSchema>
 
+export const MAX_COMMENT_LENGTH = 150
+export const commentSchema = z.object({
+  comment: z
+    .string()
+    .min(1, {
+      message: 'Please write a few words about your day before continuing.',
+    })
+    .max(MAX_COMMENT_LENGTH, {
+      message: `Your thoughts must be ${MAX_COMMENT_LENGTH} characters or less.`,
+    }),
+})
+export type CommentDataType = z.infer<typeof commentSchema>
+
 export const sleepSchema = z.object({
   sleep: z.enum(sleepValues),
 })

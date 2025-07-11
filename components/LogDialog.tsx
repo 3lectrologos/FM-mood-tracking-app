@@ -14,8 +14,9 @@ import { useState } from 'react'
 import MoodForm from '@/components/forms/MoodForm'
 import { Button } from '@/components/ui/button'
 import TagsForm from '@/components/forms/TagsForm'
+import CommentForm from '@/components/forms/CommentForm'
 
-type Step = 1 | 2 | 3
+type Step = 1 | 2 | 3 | 4
 
 export default function LogDialog() {
   const [step, setStep] = useState<Step>(1)
@@ -49,6 +50,12 @@ export default function LogDialog() {
             <TagsForm onComplete={() => setStep(3)} initValues={{ tags: [] }} />
           )}
           {step === 3 && (
+            <CommentForm
+              onComplete={() => setStep(4)}
+              initValues={{ comment: '' }}
+            />
+          )}
+          {step === 4 && (
             <SleepForm onComplete={() => {}} initValues={{ sleep: '7-8' }} />
           )}
         </DialogHeader>

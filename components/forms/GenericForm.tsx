@@ -1,5 +1,5 @@
 import { useForm, UseFormReturn } from 'react-hook-form'
-import { Form, FormMessage } from '@/components/ui/form'
+import { Form } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { ReactNode } from 'react'
 import { z } from 'zod'
@@ -17,7 +17,7 @@ export default function GenericForm<T extends z.ZodTypeAny>({
   children: (form: UseFormReturn<z.infer<T>>) => ReactNode
 }) {
   const form = useForm<z.infer<T>>({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     defaultValues: initValues,
     resolver: zodResolver(schema),
   })

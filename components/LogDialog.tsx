@@ -9,20 +9,24 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-import SleepForm from '@/components/SleepForm'
-import { sleepAction } from '@/components/dialogActions'
+import SleepForm from '@/components/forms/SleepForm'
 import { useState } from 'react'
-import MoodForm from '@/components/MoodForm'
+import MoodForm from '@/components/forms/MoodForm'
 import { Button } from '@/components/ui/button'
+import { MoodDataType, SleepDataType } from '@/schemas/form'
 
 type Step = 1 | 2
 
 export default function LogDialog() {
   const [step, setStep] = useState<Step>(1)
 
-  function handleMoodComplete(data: { mood: string }) {
+  function handleMoodComplete(data: MoodDataType) {
     console.log('Mood logged:', data.mood)
     setStep(2)
+  }
+
+  function handleSleepComplete(data: SleepDataType) {
+    console.log('Sleep logged:', data.sleep)
   }
 
   function handleClose() {
@@ -51,7 +55,10 @@ export default function LogDialog() {
             />
           )}
           {step === 2 && (
-            <SleepForm action={sleepAction} initValues={{ sleep: '7-8' }} />
+            <SleepForm
+              onComplete={handleSleepComplete}
+              initValues={{ sleep: '7-8' }}
+            />
           )}
         </DialogHeader>
       </DialogContent>

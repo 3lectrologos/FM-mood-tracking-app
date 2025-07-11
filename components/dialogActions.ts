@@ -1,7 +1,7 @@
 'use server'
 
-import { SleepActionState } from '@/components/SleepForm'
-import { moodSchema } from '@/schemas/log'
+import { SleepActionState } from '@/components/forms/SleepForm'
+import { moodSchema } from '@/schemas/form'
 
 export async function sleepAction(
   state: SleepActionState,

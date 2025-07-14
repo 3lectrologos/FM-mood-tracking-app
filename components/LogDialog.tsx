@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import SleepForm from '@/components/forms/SleepForm'
-import { ComponentType, useState } from 'react'
+import { ComponentType, useState, useTransition } from 'react'
 import MoodForm from '@/components/forms/MoodForm'
 import { Button } from '@/components/ui/button'
 import TagsForm from '@/components/forms/TagsForm'
@@ -63,9 +63,12 @@ const initValues = {
 }
 
 export default function LogDialog() {
+  const [open, setOpen] = useState(false)
   const [step, setStep] = useState<(typeof dialogSteps)[number]['name']>(
     dialogSteps[0].name
   )
+  const [isPending, startTransition] = useTransition()
+
   const progress = dialogSteps.findIndex((s) => s.name === step) + 1
   const StepComponent = dialogSteps.find((s) => s.name === step)?.component
 
@@ -74,17 +77,20 @@ export default function LogDialog() {
   }
 
   function handleComplete(values: Partial<FormDataType>) {
+    console.log(values)
     const nextStepIndex = dialogSteps.findIndex((s) => s.name === step) + 1
     if (nextStepIndex < dialogSteps.length) {
       setStep(dialogSteps[nextStepIndex].name)
     } else {
-      console.log('Final values:', values)
-      handleClose()
+      startTransition(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        setOpen(false)
+      })
     }
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>{"Log today's mood"}</Button>
       </DialogTrigger>
@@ -103,6 +109,7 @@ export default function LogDialog() {
               onComplete={handleComplete}
               initValues={initValues}
               isSubmit={progress === dialogSteps.length}
+              isPending={isPending}
             />
           )}
         </DialogHeader>

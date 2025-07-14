@@ -1,28 +1,16 @@
-import {
-  commentSchema,
-  CommentDataType,
-  MAX_COMMENT_LENGTH,
-} from '@/schemas/form'
+import { commentSchema, MAX_COMMENT_LENGTH } from '@/schemas/form'
 import { FormField, FormItem, FormMessage } from '@/components/ui/form'
-import GenericForm from '@/components/forms/GenericForm'
+import GenericForm, { FormProps } from '@/components/forms/GenericForm'
 import { Label } from '@/components/ui/label'
 import { ComponentProps } from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 
 export default function CommentForm({
-  onComplete,
-  initValues,
-}: {
-  onComplete: (values: CommentDataType) => void
-  initValues: CommentDataType
-}) {
+  ...props
+}: FormProps<typeof commentSchema>) {
   return (
-    <GenericForm
-      schema={commentSchema}
-      onComplete={onComplete}
-      initValues={initValues}
-    >
+    <GenericForm schema={commentSchema} {...props}>
       {(form) => (
         <FormField
           name="comment"

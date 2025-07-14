@@ -34,6 +34,7 @@ export type SleepDataType = z.infer<typeof sleepSchema>
 export const formSchema = z.object({
   ...moodSchema.shape,
   ...tagsSchema.shape,
+  ...commentSchema.shape,
   ...sleepSchema.shape,
 })
 export type FormDataType = z.infer<typeof formSchema>

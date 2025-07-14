@@ -1,25 +1,15 @@
 import { tagValues } from '@/types'
-import { TagsDataType, tagsSchema } from '@/schemas/form'
+import { tagsSchema } from '@/schemas/form'
 import { FormField, FormItem, FormMessage } from '@/components/ui/form'
-import GenericForm from '@/components/forms/GenericForm'
+import GenericForm, { FormProps } from '@/components/forms/GenericForm'
 import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'
 import { useRef } from 'react'
 import { Label } from '@/components/ui/label'
 
-export default function TagsForm({
-  onComplete,
-  initValues,
-}: {
-  onComplete: (values: TagsDataType) => void
-  initValues: TagsDataType
-}) {
+export default function TagsForm({ ...props }: FormProps<typeof tagsSchema>) {
   return (
-    <GenericForm
-      schema={tagsSchema}
-      onComplete={onComplete}
-      initValues={initValues}
-    >
+    <GenericForm schema={tagsSchema} {...props}>
       {(form) => (
         <FormField
           name="tags"

@@ -10,19 +10,77 @@ import {
 } from '@/components/ui/dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import SleepForm from '@/components/forms/SleepForm'
-import { useState } from 'react'
+import { ComponentType, useState } from 'react'
 import MoodForm from '@/components/forms/MoodForm'
 import { Button } from '@/components/ui/button'
 import TagsForm from '@/components/forms/TagsForm'
 import CommentForm from '@/components/forms/CommentForm'
+import {
+  commentSchema,
+  FormDataType,
+  moodSchema,
+  sleepSchema,
+  tagsSchema,
+} from '@/schemas/form'
+import { Mood, Sleep } from '@/types'
+import { FormProps } from '@/components/forms/GenericForm'
+import { z } from 'zod'
 
-type Step = 1 | 2 | 3 | 4
+type DialogStep<T extends z.ZodTypeAny> = {
+  name: string
+  component: ComponentType<FormProps<T>>
+}
+
+const dialogSteps = [
+  {
+    name: 'mood',
+    component: MoodForm,
+  },
+  {
+    name: 'tags',
+    component: TagsForm,
+  },
+  {
+    name: 'comment',
+    component: CommentForm,
+  },
+  {
+    name: 'sleep',
+    component: SleepForm,
+  },
+] as const satisfies readonly [
+  DialogStep<typeof moodSchema>,
+  DialogStep<typeof tagsSchema>,
+  DialogStep<typeof commentSchema>,
+  DialogStep<typeof sleepSchema>,
+]
+
+const initValues = {
+  mood: 'neutral' as Mood,
+  tags: [],
+  comment: '',
+  sleep: '7-8' as Sleep,
+}
 
 export default function LogDialog() {
-  const [step, setStep] = useState<Step>(1)
+  const [step, setStep] = useState<(typeof dialogSteps)[number]['name']>(
+    dialogSteps[0].name
+  )
+  const progress = dialogSteps.findIndex((s) => s.name === step) + 1
+  const StepComponent = dialogSteps.find((s) => s.name === step)?.component
 
   function handleClose() {
-    setStep(1)
+    setStep(dialogSteps[0].name)
+  }
+
+  function handleComplete(values: Partial<FormDataType>) {
+    const nextStepIndex = dialogSteps.findIndex((s) => s.name === step) + 1
+    if (nextStepIndex < dialogSteps.length) {
+      setStep(dialogSteps[nextStepIndex].name)
+    } else {
+      console.log('Final values:', values)
+      handleClose()
+    }
   }
 
   return (
@@ -39,24 +97,13 @@ export default function LogDialog() {
           <VisuallyHidden>
             <DialogDescription>Log your mood</DialogDescription>
           </VisuallyHidden>
-          <Progress step={step} />
-          {step === 1 && (
-            <MoodForm
-              onComplete={() => setStep(2)}
-              initValues={{ mood: 'neutral' }}
+          <Progress step={progress} total={dialogSteps.length} />
+          {StepComponent && (
+            <StepComponent
+              onComplete={handleComplete}
+              initValues={initValues}
+              isSubmit={progress === dialogSteps.length}
             />
-          )}
-          {step === 2 && (
-            <TagsForm onComplete={() => setStep(3)} initValues={{ tags: [] }} />
-          )}
-          {step === 3 && (
-            <CommentForm
-              onComplete={() => setStep(4)}
-              initValues={{ comment: '' }}
-            />
-          )}
-          {step === 4 && (
-            <SleepForm onComplete={() => {}} initValues={{ sleep: '7-8' }} />
           )}
         </DialogHeader>
       </DialogContent>
@@ -64,10 +111,10 @@ export default function LogDialog() {
   )
 }
 
-function Progress({ step }: { step: Step }) {
+function Progress({ step, total }: { step: number; total: number }) {
   return (
     <div className="flex gap-x-200">
-      {Array.from({ length: 4 }, (_, index) => (
+      {Array.from({ length: total }, (_, index) => (
         <div
           key={index}
           className={`h-1.5 w-full rounded-full ${

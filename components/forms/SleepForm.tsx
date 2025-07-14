@@ -6,27 +6,17 @@ import {
   FormLabel,
 } from '@/components/ui/form'
 import { CustomRadioGroup } from '@/components/forms/CustomRadioGroup'
-import { SleepDataType, sleepSchema } from '@/schemas/form'
-import GenericForm from '@/components/forms/GenericForm'
+import { sleepSchema } from '@/schemas/form'
+import GenericForm, { FormProps } from '@/components/forms/GenericForm'
 
-export default function SleepForm({
-  onComplete,
-  initValues,
-}: {
-  onComplete: (values: SleepDataType) => void
-  initValues: SleepDataType
-}) {
+export default function SleepForm({ ...props }: FormProps<typeof sleepSchema>) {
   const sleepRadioEntries = [...sleepValues].reverse().map((value) => ({
     value,
     label: `${value} hours`,
   }))
 
   return (
-    <GenericForm
-      schema={sleepSchema}
-      onComplete={onComplete}
-      initValues={initValues}
-    >
+    <GenericForm schema={sleepSchema} {...props}>
       {(form) => (
         <FormField
           name="sleep"

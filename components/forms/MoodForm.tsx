@@ -1,5 +1,5 @@
 import { moodValues } from '@/types'
-import { MoodDataType, moodSchema } from '@/schemas/form'
+import { moodSchema } from '@/schemas/form'
 import {
   FormControl,
   FormField,
@@ -8,26 +8,16 @@ import {
 } from '@/components/ui/form'
 import { CustomRadioGroup } from '@/components/forms/CustomRadioGroup'
 import { getMoodIcon } from '@/lib/utils'
-import GenericForm from '@/components/forms/GenericForm'
+import GenericForm, { FormProps } from '@/components/forms/GenericForm'
 
-export default function MoodForm({
-  onComplete,
-  initValues,
-}: {
-  onComplete: (values: MoodDataType) => void
-  initValues: MoodDataType
-}) {
+export default function MoodForm({ ...props }: FormProps<typeof moodSchema>) {
   const moodRadioEntries = [...moodValues].reverse().map((value) => ({
     value,
     icon: getMoodIcon(value),
   }))
 
   return (
-    <GenericForm
-      schema={moodSchema}
-      onComplete={onComplete}
-      initValues={initValues}
-    >
+    <GenericForm schema={moodSchema} {...props}>
       {(form) => (
         <FormField
           name="mood"

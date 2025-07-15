@@ -1,12 +1,16 @@
 'use client'
 
 import IconSleep from '@/assets/images/icon-sleep.svg'
-import { DataPoint, sleepValues } from '@/types'
+import { PartialDataPointWithDate, sleepValues } from '@/types'
 import { useEffect, useRef } from 'react'
-import DisplayBox from '@/components/DisplayBox'
+import DisplayCard from '@/components/DisplayCard'
 import TrendsGraph from '@/components/TrendsGraph'
 
-export default function TrendsDisplay({ data }: { data: DataPoint[] }) {
+export default function TrendsDisplay({
+  data,
+}: {
+  data: PartialDataPointWithDate[]
+}) {
   const graphRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -17,7 +21,7 @@ export default function TrendsDisplay({ data }: { data: DataPoint[] }) {
   }, [])
 
   return (
-    <DisplayBox>
+    <DisplayCard>
       <span className="txt-preset-3">Mood and sleep trends</span>
       <div className="flex gap-x-200">
         <div className="z-10 flex flex-col gap-y-[39px] bg-neutral-0">
@@ -42,6 +46,6 @@ export default function TrendsDisplay({ data }: { data: DataPoint[] }) {
           </div>
         </div>
       </div>
-    </DisplayBox>
+    </DisplayCard>
   )
 }

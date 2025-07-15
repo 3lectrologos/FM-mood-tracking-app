@@ -1,3 +1,5 @@
+import { FormDataType } from '@/schemas/form'
+
 export type DataType = 'mood' | 'sleep'
 
 export const moodValues = [
@@ -38,9 +40,11 @@ export type Tag = (typeof tagValues)[number]
 
 export type DataPoint = {
   date: string
-  mood?: Mood
-  sleep?: Sleep
-}
+} & FormDataType
+
+export type PartialDataPointWithDate = {
+  date: string
+} & Partial<DataPoint>
 
 export type AverageMood = {
   type: 'mood'

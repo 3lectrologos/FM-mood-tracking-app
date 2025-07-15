@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
-export default function DisplayBox({
+export default function DisplayCard({
   className,
   children,
 }: {

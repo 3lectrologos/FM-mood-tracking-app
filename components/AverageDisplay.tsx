@@ -1,7 +1,7 @@
 import { AverageData, AverageMood, AverageSleep } from '@/types'
 import AverageBox from '@/components/AverageBox'
 import Spacer from '@/components/Spacer'
-import DisplayBox from '@/components/DisplayBox'
+import DisplayCard from '@/components/DisplayCard'
 
 export default function AverageDisplay({
   moodData,
@@ -11,10 +11,10 @@ export default function AverageDisplay({
   sleepData: AverageSleep
 }) {
   return (
-    <DisplayBox>
+    <DisplayCard>
       <AverageTitleAndBox data={moodData} />
       <AverageTitleAndBox data={sleepData} />
-    </DisplayBox>
+    </DisplayCard>
   )
 }
 

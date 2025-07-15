@@ -1,7 +1,11 @@
-import { DataPoint } from '@/types'
+import { PartialDataPointWithDate, Mood, Sleep } from '@/types'
 import { getMoodIcon } from '@/lib/utils'
 
-export default function TrendsGraph({ data }: { data: DataPoint[] }) {
+export default function TrendsGraph({
+  data,
+}: {
+  data: PartialDataPointWithDate[]
+}) {
   return (
     <div className="flex gap-x-200">
       {data.map((point) => (
@@ -14,7 +18,7 @@ export default function TrendsGraph({ data }: { data: DataPoint[] }) {
   )
 }
 
-function GraphBar({ sleep, mood }: DataPoint) {
+function GraphBar({ sleep, mood }: { sleep?: Sleep; mood?: Mood }) {
   const sleepHeight =
     sleep === undefined
       ? 'h-0'

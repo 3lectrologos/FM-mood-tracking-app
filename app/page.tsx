@@ -37,13 +37,23 @@ export default function Home() {
       const point = data.find((d) => d.date === date)
       return point || { date, mood: undefined, sleep: undefined }
     })
+  const todaysMood = data.find((d) => d.date === format(today, 'yyyy-MM-dd'))
+  console.log('Mood today:', todaysMood)
 
   return (
-    <div className="flex min-h-dvh flex-col items-center px-200 pt-400 pb-1000">
+    <div className="flex min-h-dvh flex-col items-center px-200 pt-400 pb-800">
       <Header />
       <Spacer className="h-600" />
-      <MoodLogPrompt />
-      <Spacer className="h-800" />
+      {todaysMood ? (
+        <>
+          <Spacer className="h-400" />
+        </>
+      ) : (
+        <>
+          <MoodLogPrompt />
+          <Spacer className="h-600" />
+        </>
+      )}
       <AverageDisplay moodData={moodData} sleepData={sleepData} />
       <Spacer className="h-400" />
       <TrendsDisplay data={recentData} />

@@ -1,6 +1,7 @@
 import { AverageData, AverageMood, AverageSleep } from '@/types'
 import AverageBox from '@/components/AverageBox'
 import Spacer from '@/components/Spacer'
+import DisplayBox from '@/components/DisplayBox'
 
 export default function AverageDisplay({
   moodData,
@@ -10,10 +11,10 @@ export default function AverageDisplay({
   sleepData: AverageSleep
 }) {
   return (
-    <div className="flex flex-col gap-y-300 self-stretch rounded-16 border border-blue-100 bg-neutral-0 px-200 py-250">
+    <DisplayBox>
       <AverageTitleAndBox data={moodData} />
       <AverageTitleAndBox data={sleepData} />
-    </div>
+    </DisplayBox>
   )
 }
 

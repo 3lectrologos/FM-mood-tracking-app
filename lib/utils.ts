@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { Mood, moodValues, Sleep, sleepValues } from '@/types'
-import { isAfter, isBefore, startOfDay, subDays } from 'date-fns'
+import { format } from 'date-fns'
 
 import IconVeryHappyColor from '@/assets/images/icon-very-happy-color.svg'
 import IconHappyColor from '@/assets/images/icon-happy-color.svg'
@@ -25,17 +25,6 @@ export function compareMoods(mood1: Mood, mood2: Mood) {
 
 export function compareSleeps(sleep1: Sleep, sleep2: Sleep) {
   return sleepValues.indexOf(sleep2) - sleepValues.indexOf(sleep1)
-}
-
-export function isWithinLastDays(daysAgo: number, date: Date): boolean {
-  const today = startOfDay(new Date())
-  const target = startOfDay(date)
-  const startDate = startOfDay(subDays(today, daysAgo))
-
-  return (
-    (isAfter(target, startDate) || target.getTime() === startDate.getTime()) &&
-    (isBefore(target, today) || target.getTime() === today.getTime())
-  )
 }
 
 export function getMoodIcon(mood: Mood, type: 'color' | 'white' = 'color') {
@@ -66,4 +55,8 @@ export function getMoodText(mood: Mood) {
     case 'very sad':
       return 'You are stronger than you think; the storm will pass.'
   }
+}
+
+export function formatDate(date: Date) {
+  return format(date, 'yyyy-MM-dd')
 }

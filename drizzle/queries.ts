@@ -1,14 +1,12 @@
 import { db } from '@/drizzle/client'
 import { data } from '@/drizzle/schema'
-import { eq } from 'drizzle-orm'
+import { eq, gte, asc } from 'drizzle-orm'
 import { DataPoint } from '@/types'
+import { subDays } from 'date-fns'
+import { formatDate } from '@/lib/utils'
 
 export async function getTodayData() {
-  const today = new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  })
+  const today = formatDate(new Date())
   return db
     .select()
     .from(data)
@@ -22,4 +20,16 @@ export async function getTodayData() {
 
 export async function insertTodayData({ values }: { values: DataPoint }) {
   return db.insert(data).values(values)
+}
+
+export async function getRecentData(numDays: number) {
+  const startDate = formatDate(subDays(new Date(), numDays))
+  return db
+    .select()
+    .from(data)
+    .where(gte(data.date, startDate))
+    .orderBy(asc(data.date))
+    .then((rows) => {
+      return rows.map((row) => row as DataPoint)
+    })
 }

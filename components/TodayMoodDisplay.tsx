@@ -46,7 +46,7 @@ function SleepCard({ sleep }: { sleep: Sleep }) {
   return (
     <DisplayCard className="gap-y-200 px-250 py-250">
       <div className="flex items-center gap-x-150">
-        <IconSleep className="size-[22px] fill-neutral-600" />
+        <IconSleep className="size-[22px] shrink-0 fill-neutral-600" />
         <span className="txt-preset-6 text-neutral-600">Sleep</span>
       </div>
       <span className="txt-preset-3 text-[32px]">{sleep} hours</span>
@@ -64,14 +64,14 @@ function ReflectionCard({
   return (
     <DisplayCard className="gap-y-200 px-250 py-250">
       <div className="flex items-center gap-x-150">
-        <IconReflection className="size-[22px] fill-neutral-600" />
+        <IconReflection className="size-[22px] shrink-0 fill-neutral-600" />
         <span className="txt-preset-6 text-neutral-600">
           Reflection of the day
         </span>
       </div>
       <span className="min-h-20 txt-preset-6">{comment}</span>
       {tags && tags.length > 0 && (
-        <div className="flex gap-x-150">
+        <div className="flex flex-wrap gap-x-150">
           {tags.map((tag) => (
             <span
               key={tag}

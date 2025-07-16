@@ -19,3 +19,7 @@ export async function getTodayData() {
       return rows[0] as DataPoint
     })
 }
+
+export async function insertTodayData({ values }: { values: DataPoint }) {
+  return db.insert(data).values(values)
+}

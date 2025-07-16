@@ -12,7 +12,7 @@ async function seedData() {
       tags: [],
     },
     {
-      date: '2025-07-16',
+      date: '2025-07-15',
       mood: 'very happy',
       sleep: '9+',
       tags: ['grateful', 'optimistic'],

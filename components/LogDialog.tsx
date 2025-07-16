@@ -25,6 +25,7 @@ import {
 import { Mood, Sleep } from '@/types'
 import { FormProps } from '@/components/forms/GenericForm'
 import { z } from 'zod'
+import { submitFormData } from '@/actions/dialog'
 
 type DialogStep<T extends z.ZodTypeAny> = {
   name: string
@@ -67,6 +68,7 @@ export default function LogDialog() {
   const [step, setStep] = useState<(typeof dialogSteps)[number]['name']>(
     dialogSteps[0].name
   )
+  const [formData, setFormData] = useState<FormDataType>(initValues)
   const [isPending, startTransition] = useTransition()
 
   const progress = dialogSteps.findIndex((s) => s.name === step) + 1
@@ -77,13 +79,14 @@ export default function LogDialog() {
   }
 
   function handleComplete(values: Partial<FormDataType>) {
-    console.log(values)
+    const updatedValues = { ...formData, ...values }
+    setFormData(updatedValues)
     const nextStepIndex = dialogSteps.findIndex((s) => s.name === step) + 1
     if (nextStepIndex < dialogSteps.length) {
       setStep(dialogSteps[nextStepIndex].name)
     } else {
       startTransition(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
+        await submitFormData(updatedValues)
         setOpen(false)
       })
     }

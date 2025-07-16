@@ -12,8 +12,9 @@ import TrendsDisplay from '@/components/TrendsDisplay'
 import { format, subDays } from 'date-fns'
 import TodayMoodDisplay from '@/components/TodayMoodDisplay'
 import LogDialog from '@/components/LogDialog'
+import { getTodayData } from '@/drizzle/queries'
 
-export default function Home() {
+export default async function Home() {
   const moodData: AverageMood = {
     type: 'mood',
     value: 'neutral',
@@ -58,7 +59,7 @@ export default function Home() {
       const point = data.find((d) => d.date === date)
       return point || { date }
     })
-  const todayData = data.find((d) => d.date === format(today, 'yyyy-MM-dd'))
+  const todayData = await getTodayData()
 
   return (
     <div className="flex min-h-dvh flex-col items-center px-200 pt-400 pb-800">

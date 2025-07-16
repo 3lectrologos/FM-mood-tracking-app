@@ -1,0 +1,1 @@
+ALTER TABLE "data" ALTER COLUMN "comment" SET NOT NULL;

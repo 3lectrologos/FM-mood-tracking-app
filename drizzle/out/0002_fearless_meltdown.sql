@@ -1,0 +1,1 @@
+ALTER TABLE "data" ALTER COLUMN "tags" SET NOT NULL;

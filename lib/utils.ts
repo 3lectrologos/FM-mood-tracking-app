@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import { Mood, moodValues, Sleep, sleepValues } from '@/types'
+import { DataPoint, Mood, moodValues, Sleep, sleepValues } from '@/types'
 import { format } from 'date-fns'
 
 import IconVeryHappyColor from '@/assets/images/icon-very-happy-color.svg'
@@ -19,12 +19,23 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function compareMoods(mood1: Mood, mood2: Mood) {
-  return moodValues.indexOf(mood2) - moodValues.indexOf(mood1)
-}
+export function compareValues<T extends Mood | Sleep>(value1: T, value2: T) {
+  const moodIndex1 = moodValues.indexOf(value1 as Mood)
+  if (moodIndex1 !== -1 && moodValues.includes(value2 as Mood)) {
+    return (
+      moodValues.indexOf(value2 as Mood) - moodValues.indexOf(value1 as Mood)
+    )
+  }
 
-export function compareSleeps(sleep1: Sleep, sleep2: Sleep) {
-  return sleepValues.indexOf(sleep2) - sleepValues.indexOf(sleep1)
+  const sleepIndex1 = sleepValues.indexOf(value1 as Sleep)
+  if (sleepIndex1 !== -1 && sleepValues.includes(value2 as Sleep)) {
+    return (
+      sleepValues.indexOf(value2 as Sleep) -
+      sleepValues.indexOf(value1 as Sleep)
+    )
+  }
+
+  throw new Error('Both values must be of type Mood or Sleep')
 }
 
 export function getMoodIcon(mood: Mood, type: 'color' | 'white' = 'color') {
@@ -59,4 +70,15 @@ export function getMoodText(mood: Mood) {
 
 export function formatDate(date: Date) {
   return format(date, 'yyyy-MM-dd')
+}
+
+export function median<T extends Mood | Sleep>(values: T[]) {
+  if (values.length === 0) return undefined
+
+  console.log('Computing median for values:', values)
+  const sortedValues = [...values].sort((a, b) => -compareValues(a, b))
+
+  console.log('Sorted values:', sortedValues)
+
+  return sortedValues[Math.floor(sortedValues.length / 2)]
 }

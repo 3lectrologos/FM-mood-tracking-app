@@ -8,32 +8,43 @@ import { subDays } from 'date-fns'
 import TodayMoodDisplay from '@/components/TodayMoodDisplay'
 import LogDialog from '@/components/LogDialog'
 import { getRecentData, getTodayData } from '@/drizzle/queries'
-import { formatDate } from '@/lib/utils'
+import { median, formatDate } from '@/lib/utils'
+
+const NUM_RECENT_DAYS = 11
+const NUM_DAYS_TO_MEDIAN = 5
 
 export default async function Home() {
-  const moodData: AverageMood = {
-    type: 'mood',
-    value: 'neutral',
-    previous: 'neutral',
-  }
-  const sleepData: AverageSleep = {
-    type: 'sleep',
-    value: '5-6',
-    previous: '3-4',
-  }
-
-  const today = new Date()
-  const numRecentDays = 14
-  const data = await getRecentData(numRecentDays)
-  const recentData: PartialDataPointWithDate[] = Array.from(
-    { length: numRecentDays },
-    (_, i) => subDays(today, numRecentDays - 1 - i)
+  const recentData = await getRecentData(NUM_RECENT_DAYS)
+  const filledRecentData: PartialDataPointWithDate[] = Array.from(
+    { length: NUM_RECENT_DAYS },
+    (_, i) => subDays(new Date(), NUM_RECENT_DAYS - 1 - i)
   )
     .map((date) => formatDate(date))
     .map((date) => {
-      const point = data.find((d) => d.date === date)
+      const point = recentData.find((d) => d.date === date)
       return point || { date }
     })
+
+  const averageMood = {
+    type: 'mood',
+    value: median(recentData.slice(-NUM_DAYS_TO_MEDIAN).map((d) => d.mood)),
+    previous: median(
+      recentData
+        .slice(-2 * NUM_DAYS_TO_MEDIAN, -NUM_DAYS_TO_MEDIAN)
+        .map((d) => d.mood)
+    ),
+  } as AverageMood
+
+  const averageSleep = {
+    type: 'sleep',
+    value: median(recentData.slice(-NUM_DAYS_TO_MEDIAN).map((d) => d.sleep)),
+    previous: median(
+      recentData
+        .slice(-2 * NUM_DAYS_TO_MEDIAN, -NUM_DAYS_TO_MEDIAN)
+        .map((d) => d.sleep)
+    ),
+  } as AverageSleep
+
   const todayData = await getTodayData()
 
   return (
@@ -53,9 +64,9 @@ export default async function Home() {
           <Spacer className="h-600" />
         </>
       )}
-      <AverageDisplay moodData={moodData} sleepData={sleepData} />
+      <AverageDisplay moodData={averageMood} sleepData={averageSleep} />
       <Spacer className="h-400" />
-      <TrendsDisplay data={recentData} />
+      <TrendsDisplay data={filledRecentData} />
     </div>
   )
 }

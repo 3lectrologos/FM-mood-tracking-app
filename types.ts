@@ -1,7 +1,5 @@
 import { FormDataType } from '@/schemas/form'
 
-export type DataType = 'mood' | 'sleep'
-
 export const moodValues = [
   'very sad',
   'sad',

@@ -9,7 +9,7 @@ import IconSleep from '@/assets/images/icon-sleep.svg'
 import IconTrendUp from '@/assets/images/icon-trend-increase.svg'
 import IconTrendDown from '@/assets/images/icon-trend-decrease.svg'
 import IconTrendSame from '@/assets/images/icon-trend-same.svg'
-import { cn, compareMoods, compareSleeps } from '@/lib/utils'
+import { cn, compareValues } from '@/lib/utils'
 
 const defaultMoodTitle = 'Keep tracking!'
 const defaultMoodSubtitle = 'Log 5 check-ins to see your average mood.'
@@ -53,9 +53,9 @@ export default function AverageBox({ data }: { data: AverageData }) {
     if (previous === undefined || current === undefined) {
       return undefined
     }
-    if (compareMoods(previous, current) > 0) {
+    if (compareValues(previous, current) > 0) {
       return 'up'
-    } else if (compareMoods(previous, current) < 0) {
+    } else if (compareValues(previous, current) < 0) {
       return 'down'
     } else {
       return 'same'
@@ -69,9 +69,9 @@ export default function AverageBox({ data }: { data: AverageData }) {
     if (previous === undefined || current === undefined) {
       return undefined
     }
-    if (compareSleeps(previous, current) > 0) {
+    if (compareValues(previous, current) > 0) {
       return 'up'
-    } else if (compareSleeps(previous, current) < 0) {
+    } else if (compareValues(previous, current) < 0) {
       return 'down'
     } else {
       return 'same'

@@ -97,7 +97,7 @@ export default function AverageBox({ data }: { data: AverageData }) {
   return (
     <div
       className={cn(
-        'relative flex h-[150px] flex-col justify-center gap-y-150 overflow-hidden rounded-16 px-200 py-250 pr-16',
+        'relative flex h-[150px] flex-col justify-center gap-y-150 overflow-hidden rounded-16 px-200 py-250 pr-16 tablet:px-300 tablet:py-300 tablet:pr-16',
         bgColor
       )}
     >

@@ -21,10 +21,10 @@ export default function TrendsDisplay({
   }, [])
 
   return (
-    <DisplayCard>
+    <DisplayCard className="tablet:gap-y-400 tablet:px-300 tablet:py-300 desktop:px-400 desktop:py-400">
       <span className="txt-preset-3">Mood and sleep trends</span>
       <div className="flex gap-x-200">
-        <div className="z-10 flex flex-col gap-y-[39px] bg-neutral-0">
+        <div className="z-10 flex shrink-0 flex-col gap-y-[39px] bg-neutral-0">
           {sleepValues
             .slice()
             .reverse()
@@ -35,7 +35,7 @@ export default function TrendsDisplay({
               </div>
             ))}
         </div>
-        <div className="flex-1 overflow-x-auto" ref={graphRef}>
+        <div className="overflow-x-auto" ref={graphRef}>
           <div className="relative min-w-max pt-1.5 pb-0.5">
             <div className="absolute top-0 left-0 flex w-full flex-col gap-y-[51px] pt-1.5">
               {sleepValues.map((value) => (

@@ -48,25 +48,32 @@ export default async function Home() {
   const todayData = await getTodayData()
 
   return (
-    <div className="flex min-h-dvh flex-col items-center px-200 pt-400 pb-800">
-      <Header />
-      <Spacer className="h-600" />
-      <MoodLogPrompt />
-      <Spacer className="h-600" />
-      {todayData ? (
-        <>
-          <TodayMoodDisplay data={todayData} />
-          <Spacer className="h-400" />
-        </>
-      ) : (
-        <>
-          <LogDialog />
-          <Spacer className="h-600" />
-        </>
-      )}
-      <AverageDisplay moodData={averageMood} sleepData={averageSleep} />
-      <Spacer className="h-400" />
-      <TrendsDisplay data={filledRecentData} />
+    <div className="flex min-h-dvh justify-center px-200 pt-400 pb-800 tablet:px-400 tablet:pt-500">
+      <div className="flex max-w-full flex-col items-center tablet:grow-0">
+        <Header />
+        <Spacer className="h-600 desktop:h-800" />
+        <MoodLogPrompt />
+        <Spacer className="h-600 desktop:h-800" />
+        {todayData ? (
+          <>
+            <TodayMoodDisplay data={todayData} />
+            <Spacer className="h-400" />
+          </>
+        ) : (
+          <>
+            <LogDialog />
+            <Spacer className="h-600 desktop:h-800" />
+          </>
+        )}
+        <div className="flex max-w-full flex-col gap-400 desktop:flex-row">
+          <AverageDisplay
+            className="desktop:w-[370px]"
+            moodData={averageMood}
+            sleepData={averageSleep}
+          />
+          <TrendsDisplay data={filledRecentData} />
+        </div>
+      </div>
     </div>
   )
 }

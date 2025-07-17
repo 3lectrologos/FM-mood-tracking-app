@@ -68,7 +68,7 @@ function CustomCheckboxItem<T extends string>({
   return (
     <FormItem
       className={cn(
-        'flex w-fit cursor-pointer flex-row items-center gap-x-100 rounded-10 border-2 border-blue-100 bg-neutral-0 px-200 py-150',
+        'flex w-fit cursor-pointer flex-row items-center gap-x-100 rounded-10 border-2 border-blue-100 bg-neutral-0 px-200 py-125',
         checked && 'border-blue-600'
       )}
       onMouseDown={(e) => {

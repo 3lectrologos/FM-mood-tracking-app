@@ -37,7 +37,7 @@ function CustomRadioItem<T extends string>({
 
   return (
     <div
-      className="flex cursor-pointer items-center justify-between rounded-10 border-2 border-blue-100 bg-neutral-0 px-250 py-200 has-checked:border-blue-600 has-disabled:has-checked:border-blue-600/50"
+      className="box-border flex min-h-[60px] cursor-pointer items-center justify-between rounded-10 border-2 border-blue-100 bg-neutral-0 px-250 py-125 has-checked:border-blue-600 has-disabled:has-checked:border-blue-600/50"
       onMouseDown={(e) => {
         e.preventDefault()
         radioRef.current?.click()

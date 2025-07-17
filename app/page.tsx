@@ -1,4 +1,4 @@
-import Header from '@/components/Header'
+import Logo from '@/assets/images/logo.svg'
 import Spacer from '@/components/Spacer'
 import MoodLogPrompt from '@/components/MoodLogPrompt'
 import AverageDisplay from '@/components/AverageDisplay'
@@ -9,11 +9,23 @@ import TodayMoodDisplay from '@/components/TodayMoodDisplay'
 import LogDialog from '@/components/LogDialog'
 import { getRecentData, getTodayData } from '@/drizzle/queries'
 import { median, formatDate } from '@/lib/utils'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
+import UserAvatar from '@/components/UserAvatar'
 
 const NUM_RECENT_DAYS = 11
 const NUM_DAYS_TO_MEDIAN = 5
 
 export default async function Home() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) {
+    redirect('/login')
+  }
+
   const recentData = await getRecentData(NUM_RECENT_DAYS)
   const filledRecentData: PartialDataPointWithDate[] = Array.from(
     { length: NUM_RECENT_DAYS },
@@ -50,9 +62,12 @@ export default async function Home() {
   return (
     <div className="flex min-h-dvh justify-center px-200 pt-400 pb-800 tablet:px-400 tablet:pt-500">
       <div className="flex max-w-full flex-col items-center tablet:grow-0">
-        <Header />
+        <div className="flex w-full items-center justify-between">
+          <Logo />
+          <UserAvatar image={session.user.image} />
+        </div>
         <Spacer className="h-600 desktop:h-800" />
-        <MoodLogPrompt />
+        <MoodLogPrompt name={session.user.name} />
         <Spacer className="h-600 desktop:h-800" />
         {todayData ? (
           <>

@@ -1,7 +1,6 @@
 import { formatDate } from 'date-fns'
 
-export default function MoodLogPrompt() {
-  const name = 'Lisa'
+export default function MoodLogPrompt({ name }: { name: string }) {
   const date = formatDate(new Date(), 'EEEE, MMMM do, yyyy')
 
   return (

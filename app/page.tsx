@@ -12,7 +12,7 @@ import { median, formatDate } from '@/lib/utils'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import UserAvatar from '@/components/UserAvatar'
+import UserAvatar from '@/components/header/UserAvatar'
 
 const NUM_RECENT_DAYS = 11
 const NUM_DAYS_TO_MEDIAN = 5
@@ -64,7 +64,7 @@ export default async function Home() {
       <div className="flex max-w-full flex-col items-center tablet:grow-0">
         <div className="flex w-full items-center justify-between">
           <Logo />
-          <UserAvatar image={session.user.image} />
+          <UserAvatar user={session.user} />
         </div>
         <Spacer className="h-600 desktop:h-800" />
         <MoodLogPrompt name={session.user.name} />

@@ -23,6 +23,7 @@ export const user = pgTable('user', {
     .$defaultFn(() => /* @__PURE__ */ new Date())
     .notNull(),
 })
+export type User = typeof user.$inferSelect
 
 export const session = pgTable('session', {
   id: text('id').primaryKey(),

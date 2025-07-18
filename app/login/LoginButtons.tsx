@@ -32,31 +32,31 @@ export function LoginButtons({ className }: { className?: string }) {
   return (
     <div className={cn('flex flex-col gap-250', className)}>
       <Button
-        className="h-12 flex-1"
+        className="h-14 gap-200 px-0 py-0 txt-preset-6"
         onClick={() => handleLogin('google')}
         disabled={isPending}
       >
         {pendingProvider === 'google' ? (
           spinner
         ) : (
-          <div className="flex items-center gap-200 txt-preset-6">
+          <>
             <FaGoogle size={20} />
             Log in with Google
-          </div>
+          </>
         )}
       </Button>
       <Button
-        className="h-12 flex-1"
+        className="h-14 gap-200 px-0 py-0 txt-preset-6"
         onClick={() => handleLogin('github')}
         disabled={isPending}
       >
         {pendingProvider === 'github' ? (
           spinner
         ) : (
-          <div className="flex items-center gap-200 txt-preset-6">
+          <>
             <FaGithub size={20} />
             Log in with GitHub
-          </div>
+          </>
         )}
       </Button>
     </div>

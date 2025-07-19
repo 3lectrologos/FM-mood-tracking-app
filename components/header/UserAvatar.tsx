@@ -28,7 +28,7 @@ export default async function UserAvatar({
         <DropdownArrowIcon className="w-[11px]" />
       </PopoverTrigger>
       <PopoverContent
-        className="right-2 left-2 flex w-[calc(100vw-3rem)] flex-col items-start gap-150 rounded-8 border-none bg-neutral-0 px-200 py-150 shadow-popover tablet:w-[200px]"
+        className="right-2 left-2 flex w-[calc(100vw-2rem)] flex-col items-start gap-150 rounded-8 border-none bg-neutral-0 px-200 py-150 shadow-popover tablet:w-[200px]"
         align="end"
         sideOffset={16}
       >

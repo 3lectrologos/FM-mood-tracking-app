@@ -56,8 +56,12 @@ async function seedData() {
       comment: 'Woke up early and finally tackled a big project!',
     },
   ]
+  const dataSeedWithUserId = dataSeed.map((item) => ({
+    ...item,
+    userId: 'aiBtNrqKwtDIK738dnGaeoeo8TKjd7e7',
+  }))
 
-  await db.insert(data).values(dataSeed)
+  await db.insert(data).values(dataSeedWithUserId)
 }
 
 async function seed() {

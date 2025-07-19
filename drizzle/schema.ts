@@ -6,6 +6,12 @@ export const data = pgTable('data', {
   sleep: text().notNull(),
   comment: text().notNull(),
   tags: text().array().notNull().default([]),
+  createdAt: timestamp('created_at')
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
 })
 
 export const user = pgTable('user', {

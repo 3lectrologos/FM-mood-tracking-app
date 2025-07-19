@@ -26,7 +26,7 @@ export default async function Home() {
     redirect('/login')
   }
 
-  const recentData = await getRecentData(NUM_RECENT_DAYS)
+  const recentData = await getRecentData(session.user.id, NUM_RECENT_DAYS)
   const filledRecentData: PartialDataPointWithDate[] = Array.from(
     { length: NUM_RECENT_DAYS },
     (_, i) => subDays(new Date(), NUM_RECENT_DAYS - 1 - i)
@@ -57,7 +57,7 @@ export default async function Home() {
     ),
   } as AverageSleep
 
-  const todayData = await getTodayData()
+  const todayData = await getTodayData(session.user.id)
 
   return (
     <div className="flex min-h-dvh justify-center px-200 pt-400 pb-800 tablet:px-400 tablet:pt-500">

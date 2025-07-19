@@ -74,11 +74,6 @@ export function formatDate(date: Date) {
 
 export function median<T extends Mood | Sleep>(values: T[]) {
   if (values.length === 0) return undefined
-
-  console.log('Computing median for values:', values)
   const sortedValues = [...values].sort((a, b) => -compareValues(a, b))
-
-  console.log('Sorted values:', sortedValues)
-
   return sortedValues[Math.floor(sortedValues.length / 2)]
 }

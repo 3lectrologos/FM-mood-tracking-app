@@ -28,6 +28,8 @@ export const user = pgTable('user', {
   updatedAt: timestamp('updated_at')
     .$defaultFn(() => /* @__PURE__ */ new Date())
     .notNull(),
+  firstName: text('first_name'),
+  lastName: text('last_name'),
 })
 export type User = typeof user.$inferSelect
 

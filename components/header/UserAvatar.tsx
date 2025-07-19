@@ -7,10 +7,14 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { User } from 'better-auth'
 import LogoutButton from '@/components/header/LogoutButton'
+import { auth } from '@/lib/auth'
 
-export default async function UserAvatar({ user }: { user: User }) {
+export default async function UserAvatar({
+  user,
+}: {
+  user: typeof auth.$Infer.Session.user
+}) {
   return (
     <Popover>
       <PopoverTrigger className="flex items-center gap-x-2.5">

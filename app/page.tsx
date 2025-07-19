@@ -67,7 +67,7 @@ export default async function Home() {
           <UserAvatar user={session.user} />
         </div>
         <Spacer className="h-600 desktop:h-800" />
-        <MoodLogPrompt name={session.user.name} />
+        <MoodLogPrompt name={session.user.firstName ?? session.user.name} />
         <Spacer className="h-600 desktop:h-800" />
         {todayData ? (
           <>

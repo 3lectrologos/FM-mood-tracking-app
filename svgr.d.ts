@@ -5,6 +5,6 @@ declare module '*.svg' {
 }
 
 declare module '*.svg?url' {
-  const content: any
+  const content: never
   export default content
 }

@@ -61,7 +61,7 @@ export default async function Home() {
 
   return (
     <div className="flex min-h-dvh justify-center px-200 pt-400 pb-800 tablet:px-400 tablet:pt-500">
-      <div className="flex max-w-full flex-col items-center tablet:grow-0">
+      <div className="flex max-w-full flex-col items-center tablet:w-[733px] desktop:w-auto">
         <div className="flex w-full items-center justify-between">
           <Logo />
           <UserAvatar user={session.user} />
@@ -71,7 +71,7 @@ export default async function Home() {
         <Spacer className="h-600 desktop:h-800" />
         {todayData ? (
           <>
-            <TodayMoodDisplay data={todayData} />
+            <TodayMoodDisplay className="desktop:w-[1170px]" data={todayData} />
             <Spacer className="h-400" />
           </>
         ) : (
@@ -80,9 +80,9 @@ export default async function Home() {
             <Spacer className="h-600 desktop:h-800" />
           </>
         )}
-        <div className="flex max-w-full flex-col gap-400 desktop:flex-row">
+        <div className="flex max-w-full flex-col gap-400 desktop:w-[1170px] desktop:flex-row">
           <AverageDisplay
-            className="desktop:w-[370px]"
+            className="desktop:flex-1"
             moodData={averageMood}
             sleepData={averageSleep}
           />

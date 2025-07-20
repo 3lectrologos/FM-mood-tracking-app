@@ -99,7 +99,7 @@ export default function LogDialog() {
       </DialogTrigger>
       <DialogContent
         onAnimationEnd={handleClose}
-        className="rounded-16 bg-light-gradient px-250 py-400 tablet:w-[600px] tablet:px-500 tablet:py-600"
+        className="max-h-[calc(100dvh-40px)] overflow-y-auto rounded-16 bg-light-gradient px-250 py-400 tablet:w-[600px] tablet:px-500 tablet:py-600"
       >
         <DialogHeader className="flex flex-col gap-y-400">
           <DialogTitle className="txt-preset-2">Log your mood</DialogTitle>

@@ -23,7 +23,7 @@ export default function TodayMoodDisplay({
         className="shrink-0 tablet:h-[340px] desktop:w-[670px]"
         mood={data.mood}
       />
-      <div className="flex min-h-[340px] min-w-0 flex-col gap-y-250">
+      <div className="flex min-h-[340px] min-w-0 flex-col gap-y-250 desktop:flex-1">
         <SleepCard sleep={data.sleep} />
         <ReflectionCard comment={data.comment} tags={data.tags} />
       </div>

@@ -71,7 +71,10 @@ export default async function Home() {
         <Spacer className="h-600 desktop:h-800" />
         {todayData ? (
           <>
-            <TodayMoodDisplay className="desktop:w-[1170px]" data={todayData} />
+            <TodayMoodDisplay
+              className="self-stretch desktop:w-[1170px]"
+              data={todayData}
+            />
             <Spacer className="h-400" />
           </>
         ) : (

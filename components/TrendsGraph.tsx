@@ -1,5 +1,6 @@
 import { PartialDataPointWithDate, sleepValues } from '@/types'
-import { getMoodIcon } from '@/lib/utils'
+import IconTriangle from '@/assets/images/icon-triangle.svg'
+import { cn, getMoodIcon } from '@/lib/utils'
 import {
   Popover,
   PopoverContent,
@@ -46,6 +47,10 @@ type GraphBarProps = {
 
 function GraphBar({ containerRef, mood, sleep, comment, tags }: GraphBarProps) {
   const [container, setContainer] = useState<HTMLDivElement | null>(null)
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+  const [popoverSide, setPopoverSide] = useState<string | null>(null)
+
+  console.log('Side', popoverSide)
 
   useEffect(() => {
     setContainer(containerRef.current)
@@ -78,7 +83,7 @@ function GraphBar({ containerRef, mood, sleep, comment, tags }: GraphBarProps) {
 
   return (
     <div className="flex h-[260px] flex-col justify-end">
-      <Popover>
+      <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
         <PopoverTrigger
           className={`relative w-10 ${sleepHeight} ${moodColor} rounded-full`}
           disabled={mood === undefined}
@@ -86,6 +91,16 @@ function GraphBar({ containerRef, mood, sleep, comment, tags }: GraphBarProps) {
           <div className="absolute top-1.5 left-1/2 flex h-[30px] w-[30px] -translate-x-1/2">
             {Icon && <Icon />}
           </div>
+          {isPopoverOpen && (
+            <div
+              className={cn(
+                'absolute top-[15px] -left-[13px] z-[60] h-2 w-2',
+                popoverSide === 'right' && '-right-[13px] left-auto rotate-180'
+              )}
+            >
+              <IconTriangle />
+            </div>
+          )}
         </PopoverTrigger>
         <PopoverContent
           className="flex w-[175px] flex-col gap-150 rounded-10 border border-blue-100 p-150 shadow-graph-popover"
@@ -94,6 +109,24 @@ function GraphBar({ containerRef, mood, sleep, comment, tags }: GraphBarProps) {
           align="start"
           collisionBoundary={container}
           collisionPadding={{ bottom: 44, top: -100, left: -60 }}
+          ref={(node) => {
+            if (node === null) {
+              return
+            }
+            const updateSide = () => {
+              setPopoverSide(node.getAttribute('data-side'))
+            }
+
+            updateSide()
+
+            const observer = new MutationObserver(updateSide)
+            observer.observe(node, {
+              attributes: true,
+              attributeFilter: ['data-side'],
+            })
+
+            return () => observer.disconnect()
+          }}
         >
           <div className="flex flex-col gap-075">
             <span className="txt-preset-8 text-neutral-600">Mood</span>

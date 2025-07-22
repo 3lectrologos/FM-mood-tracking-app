@@ -20,6 +20,8 @@ export async function submitFormData(data: FormDataType) {
     console.error('Validation error:', error)
     return { error: error.message }
   }
+
+  // TODO: Maybe move this to the query function?
   const today = formatDate(new Date())
   await insertTodayData({
     values: { ...data, date: today, userId: session.user.id },

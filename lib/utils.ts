@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { Mood, moodValues, Sleep, sleepValues } from '@/types'
-import { format } from 'date-fns'
+import { format } from 'date-fns-tz'
 
 import IconVeryHappyColor from '@/assets/images/icon-very-happy-color.svg'
 import IconHappyColor from '@/assets/images/icon-happy-color.svg'
@@ -69,7 +69,7 @@ export function getMoodText(mood: Mood) {
 }
 
 export function formatDate(date: Date) {
-  return format(date, 'yyyy-MM-dd')
+  return format(date, 'yyyy-MM-dd', { timeZone: 'UTC' })
 }
 
 export function median<T extends Mood | Sleep>(values: T[]) {

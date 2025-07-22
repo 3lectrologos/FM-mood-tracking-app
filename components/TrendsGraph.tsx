@@ -81,6 +81,7 @@ function GraphBar({ containerRef, mood, sleep, comment, tags }: GraphBarProps) {
       <Popover>
         <PopoverTrigger
           className={`relative w-10 ${sleepHeight} ${moodColor} rounded-full`}
+          disabled={mood === undefined}
         >
           <div className="absolute top-1.5 left-1/2 flex h-[30px] w-[30px] -translate-x-1/2">
             {Icon && <Icon />}
@@ -91,8 +92,8 @@ function GraphBar({ containerRef, mood, sleep, comment, tags }: GraphBarProps) {
           side="left"
           sideOffset={8}
           align="start"
-          collisionBoundary={[container]}
-          collisionPadding={{ bottom: 44, top: -80 }}
+          collisionBoundary={container}
+          collisionPadding={{ bottom: 44, top: -100, left: -60 }}
         >
           <div className="flex flex-col gap-075">
             <span className="txt-preset-8 text-neutral-600">Mood</span>

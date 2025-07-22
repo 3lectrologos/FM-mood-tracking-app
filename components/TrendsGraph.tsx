@@ -1,5 +1,10 @@
-import { PartialDataPointWithDate, Mood, Sleep } from '@/types'
+import { PartialDataPointWithDate } from '@/types'
 import { getMoodIcon } from '@/lib/utils'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 
 export default function TrendsGraph({
   data,
@@ -18,7 +23,7 @@ export default function TrendsGraph({
   )
 }
 
-function GraphBar({ sleep, mood }: { sleep?: Sleep; mood?: Mood }) {
+function GraphBar({ mood, sleep, comment, tags }: PartialDataPointWithDate) {
   const sleepHeight =
     sleep === undefined
       ? 'h-0'
@@ -42,14 +47,45 @@ function GraphBar({ sleep, mood }: { sleep?: Sleep; mood?: Mood }) {
         }[mood]
 
   const Icon = mood && getMoodIcon(mood, 'white')
+  const ColorIcon = mood && getMoodIcon(mood, 'color')
 
   return (
     <div className="flex h-[260px] flex-col justify-end">
-      <div className={`relative w-10 ${sleepHeight} ${moodColor} rounded-full`}>
-        <div className="absolute top-1.5 left-1/2 flex h-[30px] w-[30px] -translate-x-1/2">
-          {Icon && <Icon />}
-        </div>
-      </div>
+      <Popover>
+        <PopoverTrigger
+          className={`relative w-10 ${sleepHeight} ${moodColor} rounded-full`}
+        >
+          <div className="absolute top-1.5 left-1/2 flex h-[30px] w-[30px] -translate-x-1/2">
+            {Icon && <Icon />}
+          </div>
+        </PopoverTrigger>
+        <PopoverContent
+          className="flex w-[175px] flex-col gap-150 rounded-10 border border-blue-100 p-150 shadow-graph-popover"
+          side="left"
+          sideOffset={8}
+          align="start"
+        >
+          <div className="flex flex-col gap-075">
+            <span className="txt-preset-8 text-neutral-600">Mood</span>
+            <div className="flex items-center gap-075">
+              {ColorIcon && <ColorIcon className="h-[0.7lh]" />}
+              <span className="txt-preset-7 capitalize">{mood}</span>
+            </div>
+          </div>
+          <div className="flex flex-col gap-075">
+            <span className="txt-preset-8 text-neutral-600">Sleep</span>
+            <span className="txt-preset-7">{sleep} hours</span>
+          </div>
+          <div className="flex flex-col gap-075">
+            <span className="txt-preset-8 text-neutral-600">Reflection</span>
+            <span className="txt-preset-9">{comment}</span>
+          </div>
+          <div className="flex flex-col gap-075">
+            <span className="txt-preset-8 text-neutral-600">Tags</span>
+            <span className="txt-preset-9 capitalize">{tags?.join(', ')}</span>
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
   )
 }

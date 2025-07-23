@@ -1,18 +1,16 @@
 'use client'
 
 import { useEffect } from 'react'
+import { updateTimezone } from '@/actions/timezone'
+import { useRouter } from 'next/navigation'
 
 export function TimezoneSetter() {
+  const router = useRouter()
+
   useEffect(() => {
-    const cookieTimezone = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('tz='))
-      ?.split('=')[1]
-    const currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
-    if (cookieTimezone !== currentTimezone) {
-      document.cookie = `tz=${currentTimezone}; path=/; max-age=${60 * 60 * 24 * 365}`
-    }
-  }, [])
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    updateTimezone(timezone).then(() => router.refresh())
+  }, [router])
 
   return null
 }

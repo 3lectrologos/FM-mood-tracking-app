@@ -4,10 +4,13 @@ import { useEffect } from 'react'
 
 export function TimezoneSetter() {
   useEffect(() => {
-    const hasCookie = document.cookie.includes('tz=')
-    if (!hasCookie) {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
-      document.cookie = `tz=${tz}; path=/; max-age=${60 * 60 * 24 * 365}`
+    const cookieTimezone = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('tz='))
+      ?.split('=')[1]
+    const currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    if (cookieTimezone !== currentTimezone) {
+      document.cookie = `tz=${currentTimezone}; path=/; max-age=${60 * 60 * 24 * 365}`
     }
   }, [])
 

@@ -10,14 +10,17 @@ import LogDialog from '@/components/LogDialog'
 import { getRecentData, getTodayData } from '@/drizzle/queries'
 import { median, formatDate } from '@/lib/utils'
 import { auth } from '@/lib/auth'
-import { headers } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import UserAvatar from '@/components/header/UserAvatar'
+import { getZonedToday } from '@/lib/serverUtils'
 
 const NUM_RECENT_DAYS = 11
 const NUM_DAYS_TO_MEDIAN = 5
 
 export default async function Home() {
+  const cookieStore = await cookies()
+  const timezone = cookieStore.get('tz')
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -26,10 +29,11 @@ export default async function Home() {
     redirect('/login')
   }
 
+  const today = await getZonedToday()
   const recentData = await getRecentData(session.user.id, NUM_RECENT_DAYS)
   const filledRecentData: PartialDataPointWithDate[] = Array.from(
     { length: NUM_RECENT_DAYS },
-    (_, i) => subDays(new Date(), NUM_RECENT_DAYS - 1 - i)
+    (_, i) => subDays(today, NUM_RECENT_DAYS - 1 - i)
   )
     .map((date) => formatDate(date))
     .map((date) => {
@@ -58,6 +62,10 @@ export default async function Home() {
   } as AverageSleep
 
   const todayData = await getTodayData(session.user.id)
+
+  if (!timezone) {
+    return null
+  }
 
   return (
     <div className="flex min-h-dvh justify-center px-200 pt-400 pb-800 tablet:px-400 tablet:pt-500">

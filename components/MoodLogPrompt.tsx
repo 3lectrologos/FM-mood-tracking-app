@@ -1,7 +1,9 @@
 import { formatDate } from 'date-fns'
+import { getZonedToday } from '@/lib/serverUtils'
 
-export default function MoodLogPrompt({ name }: { name: string }) {
-  const date = formatDate(new Date(), 'EEEE, MMMM do, yyyy')
+export default async function MoodLogPrompt({ name }: { name: string }) {
+  const today = await getZonedToday()
+  const date = formatDate(today, 'EEEE, MMMM do, yyyy')
 
   return (
     <div className="flex flex-col items-center gap-y-200">

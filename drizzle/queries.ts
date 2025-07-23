@@ -4,9 +4,12 @@ import { eq, gte, asc, and } from 'drizzle-orm'
 import { DataPoint } from '@/types'
 import { subDays } from 'date-fns'
 import { formatDate } from '@/lib/utils'
+import { getZonedToday } from '@/lib/serverUtils'
+import { FormDataType } from '@/schemas/form'
 
 export async function getTodayData(userId: string) {
-  const today = formatDate(new Date())
+  const today = await getZonedToday()
+
   return db
     .select()
     .from(data)
@@ -20,14 +23,18 @@ export async function getTodayData(userId: string) {
 
 export async function insertTodayData({
   values,
+  userId,
 }: {
-  values: typeof data.$inferInsert
+  values: FormDataType
+  userId: string
 }) {
-  return db.insert(data).values(values)
+  const today = await getZonedToday()
+  return db.insert(data).values({ date: today, userId, ...values })
 }
 
 export async function getRecentData(userId: string, numDays: number) {
-  const startDate = formatDate(subDays(new Date(), numDays))
+  const today = await getZonedToday()
+  const startDate = formatDate(subDays(today, numDays))
   return db
     .select()
     .from(data)

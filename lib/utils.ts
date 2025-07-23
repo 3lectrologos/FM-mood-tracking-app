@@ -69,7 +69,7 @@ export function getMoodText(mood: Mood) {
 }
 
 export function formatDate(date: Date) {
-  return format(date, 'yyyy-MM-dd', { timeZone: 'UTC' })
+  return format(date, 'yyyy-MM-dd')
 }
 
 export function median<T extends Mood | Sleep>(values: T[]) {

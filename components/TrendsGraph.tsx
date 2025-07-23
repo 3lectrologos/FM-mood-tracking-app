@@ -50,8 +50,6 @@ function GraphBar({ containerRef, mood, sleep, comment, tags }: GraphBarProps) {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const [popoverSide, setPopoverSide] = useState<string | null>(null)
 
-  console.log('Side', popoverSide)
-
   useEffect(() => {
     setContainer(containerRef.current)
   }, [containerRef])

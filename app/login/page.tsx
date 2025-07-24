@@ -1,6 +1,8 @@
 import Logo from '@/assets/images/logo.svg'
 import { LoginButtons } from '@/app/login/LoginButtons'
 import DisplayCard from '@/components/DisplayCard'
+import MagicLinkForm from '@/app/login/MagicLinkForm'
+import { onMagicLinkSubmit } from '@/actions/auth'
 
 export default function LoginPage() {
   return (
@@ -9,11 +11,13 @@ export default function LoginPage() {
         <Logo className="self-center" />
         <DisplayCard className="gap-y-400 px-200 py-400 tablet:px-400 tablet:py-500">
           <div className="flex flex-col gap-100">
-            <h1 className="txt-preset-3">Get tracking!</h1>
+            <h1 className="txt-preset-3">Start tracking!</h1>
             <h2 className="txt-preset-6-regular text-neutral-600">
               Log in to start tracking your mood and sleep.
             </h2>
           </div>
+          <MagicLinkForm onSubmitAction={onMagicLinkSubmit} />
+          <div className="h-px w-full bg-neutral-200" />
           <LoginButtons className="justify-center" />
         </DisplayCard>
       </div>

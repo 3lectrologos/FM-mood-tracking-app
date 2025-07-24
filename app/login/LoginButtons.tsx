@@ -32,7 +32,7 @@ export function LoginButtons({ className }: { className?: string }) {
   return (
     <div className={cn('flex flex-col gap-250', className)}>
       <Button
-        className="h-14 gap-200 px-0 py-0 txt-preset-6"
+        className="h-12 gap-200 px-0 py-0 txt-preset-6"
         onClick={() => handleLogin('google')}
         disabled={isPending}
       >
@@ -46,7 +46,7 @@ export function LoginButtons({ className }: { className?: string }) {
         )}
       </Button>
       <Button
-        className="h-14 gap-200 px-0 py-0 txt-preset-6"
+        className="h-12 gap-200 px-0 py-0 txt-preset-6"
         onClick={() => handleLogin('github')}
         disabled={isPending}
       >

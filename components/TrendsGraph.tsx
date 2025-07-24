@@ -7,6 +7,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { RefObject, useEffect, useRef, useState } from 'react'
+import { format } from 'date-fns'
 
 export default function TrendsGraph({
   data,
@@ -152,9 +153,8 @@ function GraphBar({ containerRef, mood, sleep, comment, tags }: GraphBarProps) {
 }
 
 function GraphDate({ dateString }: { dateString: string }) {
-  const date = new Date(dateString)
-  const month = date.toLocaleString('default', { month: 'short' })
-  const day = date.getDate()
+  const day = dateString.split('-')[2]
+  const month = format(dateString, 'LLL')
 
   return (
     <div className="flex flex-col items-center gap-y-075">

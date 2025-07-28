@@ -10,5 +10,12 @@ export async function logout() {
 }
 
 export async function onMagicLinkSubmit(data: { name: string; email: string }) {
-  // TODO
+  await auth.api.signInMagicLink({
+    body: {
+      email: data.email,
+      name: data.name,
+      callbackURL: '/',
+    },
+    headers: await headers(),
+  })
 }

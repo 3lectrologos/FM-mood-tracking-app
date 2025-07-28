@@ -1,8 +1,11 @@
 import { betterAuth } from 'better-auth'
+import { magicLink } from 'better-auth/plugins'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { db } from '@/drizzle/client'
 import { nextCookies } from 'better-auth/next-js'
 import * as schema from '@/drizzle/schema'
+import { resend } from '@/lib/resend'
+import { LoginEmailTemplate } from '@/components/LoginEmailTemplate'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: 'pg', schema }),
@@ -32,5 +35,19 @@ export const auth = betterAuth({
       }),
     },
   },
-  plugins: [nextCookies()],
+  plugins: [
+    nextCookies(),
+    magicLink({
+      sendMagicLink: async ({ email, url }) => {
+        console.log('Sending magic link to:', email)
+        console.log('Magic link url:', url)
+        await resend.emails.send({
+          from: 'onboarding@resend.dev',
+          to: 'alkis.gotovos@gmail.com',
+          subject: 'Your Mood Tracker Login',
+          react: LoginEmailTemplate({ url }),
+        })
+      },
+    }),
+  ],
 })

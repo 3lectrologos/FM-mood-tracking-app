@@ -1,6 +1,12 @@
 'use client'
 
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form'
 import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -39,10 +45,11 @@ export default function MagicLinkForm({
           name="name"
           control={form.control}
           render={({ field }) => (
-            <FormItem className="">
+            <FormItem className="flex flex-col gap-075">
               <FormControl>
                 <Input placeholder="Your Name" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -51,10 +58,11 @@ export default function MagicLinkForm({
           name="email"
           control={form.control}
           render={({ field }) => (
-            <FormItem className="">
+            <FormItem className="flex flex-col gap-075">
               <FormControl>
                 <Input placeholder="Your Email" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

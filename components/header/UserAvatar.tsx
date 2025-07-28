@@ -18,7 +18,7 @@ export default async function UserAvatar({
   return (
     <Popover>
       <PopoverTrigger className="flex items-center gap-x-2.5">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-neutral-200/30">
           {user.image ? (
             <img src={user.image} alt="user avatar" />
           ) : (

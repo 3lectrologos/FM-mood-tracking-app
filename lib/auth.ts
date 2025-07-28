@@ -42,9 +42,9 @@ export const auth = betterAuth({
         console.log('Sending magic link to:', email)
         console.log('Magic link url:', url)
         await resend.emails.send({
-          from: 'onboarding@resend.dev',
-          to: 'alkis.gotovos@gmail.com',
-          subject: 'Your Mood Tracker Login',
+          from: 'login@moodonion.site',
+          to: email,
+          subject: 'Your Mood Onion Login',
           react: LoginEmailTemplate({ url }),
         })
       },

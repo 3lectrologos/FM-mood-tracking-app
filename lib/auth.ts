@@ -41,6 +41,8 @@ export const auth = betterAuth({
       sendMagicLink: async ({ email, url }) => {
         console.log('Sending magic link to:', email)
         console.log('Magic link url:', url)
+        // Simulate sending an email by waiting for 1 second
+        // await new Promise((resolve) => setTimeout(resolve, 1000))
         await resend.emails.send({
           from: 'login@moodonion.site',
           to: email,

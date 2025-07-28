@@ -2,7 +2,6 @@ import Logo from '@/assets/images/logo.svg'
 import { LoginButtons } from '@/app/login/LoginButtons'
 import DisplayCard from '@/components/DisplayCard'
 import MagicLinkForm from '@/app/login/MagicLinkForm'
-import { onMagicLinkSubmit } from '@/actions/auth'
 
 export default function LoginPage() {
   return (
@@ -16,7 +15,7 @@ export default function LoginPage() {
               Log in to start tracking your mood and sleep.
             </h2>
           </div>
-          <MagicLinkForm onSubmitAction={onMagicLinkSubmit} />
+          <MagicLinkForm />
           <div className="h-px w-full bg-neutral-200" />
           <LoginButtons className="justify-center" />
         </DisplayCard>

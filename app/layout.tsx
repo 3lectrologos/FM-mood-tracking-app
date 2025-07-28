@@ -10,7 +10,7 @@ const redditSans = Reddit_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Mood Tracker',
+  title: 'Mood Onion',
   description: 'Track your daily mood with ease',
 }
 

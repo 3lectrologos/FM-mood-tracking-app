@@ -1,18 +1,33 @@
-import { pgTable, text, date, boolean, timestamp } from 'drizzle-orm/pg-core'
+import {
+  pgTable,
+  text,
+  date,
+  boolean,
+  timestamp,
+  uuid,
+  unique,
+} from 'drizzle-orm/pg-core'
 
-export const data = pgTable('data', {
-  date: date({ mode: 'string' }).notNull().primaryKey(),
-  mood: text().notNull(),
-  sleep: text().notNull(),
-  comment: text().notNull(),
-  tags: text().array().notNull().default([]),
-  createdAt: timestamp('created_at')
-    .$defaultFn(() => /* @__PURE__ */ new Date())
-    .notNull(),
-  userId: text('user_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
-})
+export const data = pgTable(
+  'data',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    date: date({ mode: 'string' }).notNull(),
+    mood: text().notNull(),
+    sleep: text().notNull(),
+    comment: text().notNull(),
+    tags: text().array().notNull().default([]),
+    createdAt: timestamp('created_at')
+      .$defaultFn(() => /* @__PURE__ */ new Date())
+      .notNull(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+  },
+  (table) => ({
+    uniqueUserDate: unique().on(table.userId, table.date),
+  })
+)
 
 export const user = pgTable('user', {
   id: text('id').primaryKey(),

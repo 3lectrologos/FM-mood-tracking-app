@@ -3,12 +3,12 @@
 import { FaGithub, FaGoogle } from 'react-icons/fa6'
 import { Button } from '@/components/ui/button'
 import { authClient } from '@/lib/auth-client'
-import { useState, useTransition } from 'react'
+import { useState } from 'react'
 import { PulseLoader } from 'react-spinners'
 import { cn } from '@/lib/utils'
 
 export function LoginButtons({ className }: { className?: string }) {
-  const [isPending, startTransition] = useTransition()
+  const [isPending, setIsPending] = useState(false)
   const [pendingProvider, setPendingProvider] = useState<string | null>(null)
 
   const spinner = <PulseLoader color="#FFF" size={8} margin={2} />
@@ -18,14 +18,10 @@ export function LoginButtons({ className }: { className?: string }) {
     if (isPending) {
       return
     }
+    setIsPending(true)
     setPendingProvider(provider)
-    startTransition(async () => {
-      await authClient.signIn.social({
-        provider,
-      })
-      startTransition(() => {
-        setPendingProvider(null)
-      })
+    await authClient.signIn.social({
+      provider,
     })
   }
 

@@ -106,7 +106,7 @@
 
   --background-image-light-gradient: linear-gradient(180deg, #F5F5FF 72.99%, #E0E0FF 100%);
 
-  --breakpoint-tablet: 640px;
+  --breakpoint-tablet: 700px;
   --breakpoint-desktop: 1280px;
 }
 

@@ -53,7 +53,7 @@ function MoodCard({ mood, className }: { mood: Mood; className?: string }) {
       <Icon className="size-[200px] tablet:absolute tablet:top-[50px] tablet:right-10 tablet:size-[320px]" />
       <div className="flex flex-col items-center gap-200 tablet:w-[246px] tablet:items-start tablet:gap-150">
         <IconQuote className="size-6" />
-        <span className="px-1 text-center txt-preset-6-italic text-pretty tablet:text-start">
+        <span className="pr-1 text-center txt-preset-6-italic text-pretty tablet:text-start">
           {moodText}
         </span>
       </div>

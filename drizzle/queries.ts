@@ -1,11 +1,10 @@
 import { db } from '@/drizzle/client'
 import { data } from '@/drizzle/schema'
 import { eq, gte, asc, and } from 'drizzle-orm'
-import { DataPoint } from '@/types'
 import { subDays } from 'date-fns'
 import { formatDate } from '@/lib/utils'
 import { getZonedToday } from '@/lib/serverUtils'
-import { FormDataType } from '@/schemas/form'
+import { DataPoint, FormDataType } from '@/schemas/form'
 
 export async function getTodayData(userId: string) {
   const today = await getZonedToday()
@@ -29,7 +28,13 @@ export async function insertTodayData({
   userId: string
 }) {
   const today = await getZonedToday()
-  return db.insert(data).values({ date: today, userId, ...values })
+  return db
+    .insert(data)
+    .values({ date: today, userId, ...values })
+    .onConflictDoUpdate({
+      target: [data.date, data.userId],
+      set: { ...values },
+    })
 }
 
 export async function getRecentData(userId: string, numDays: number) {

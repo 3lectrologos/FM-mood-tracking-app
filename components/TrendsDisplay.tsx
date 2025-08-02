@@ -1,10 +1,11 @@
 'use client'
 
 import IconSleep from '@/assets/images/icon-sleep.svg'
-import { PartialDataPointWithDate, sleepValues } from '@/types'
+import { sleepValues } from '@/types'
 import { useEffect, useRef } from 'react'
 import DisplayCard from '@/components/DisplayCard'
 import TrendsGraph from '@/components/TrendsGraph'
+import { PartialDataPointWithDate } from '@/schemas/form'
 
 export default function TrendsDisplay({
   data,
@@ -23,7 +24,7 @@ export default function TrendsDisplay({
 
   return (
     <DisplayCard
-      className="tablet:gap-y-400 tablet:px-300 tablet:py-300 desktop:px-400 desktop:py-400"
+      className="px-250 py-250 tablet:gap-y-400 tablet:px-300 tablet:py-300 desktop:px-400 desktop:py-400"
       ref={containerRef}
     >
       <span className="txt-preset-3">Mood and sleep trends</span>

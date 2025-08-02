@@ -2,7 +2,7 @@ import Logo from '@/assets/images/logo.svg'
 import Spacer from '@/components/Spacer'
 import MoodLogPrompt from '@/components/MoodLogPrompt'
 import AverageDisplay from '@/components/AverageDisplay'
-import { AverageMood, AverageSleep, PartialDataPointWithDate } from '@/types'
+import { AverageMood, AverageSleep } from '@/types'
 import TrendsDisplay from '@/components/TrendsDisplay'
 import { subDays } from 'date-fns'
 import TodayMoodDisplay from '@/components/TodayMoodDisplay'
@@ -14,6 +14,8 @@ import { cookies, headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import UserAvatar from '@/components/header/UserAvatar'
 import { getZonedToday } from '@/lib/serverUtils'
+import { Button } from '@/components/ui/button'
+import { PartialDataPointWithDate } from '@/schemas/form'
 
 const NUM_RECENT_DAYS = 11
 const NUM_DAYS_TO_MEDIAN = 5
@@ -69,7 +71,7 @@ export default async function Home() {
 
   return (
     <div className="flex min-h-dvh justify-center px-200 pt-400 pb-800 tablet:px-400 tablet:pt-500">
-      <div className="flex max-w-full flex-col items-center tablet:w-[733px] desktop:w-auto">
+      <div className="flex max-w-full min-w-[300px] flex-col items-center tablet:w-[733px] desktop:w-auto">
         <div className="flex w-full items-center justify-between">
           <Logo />
           <UserAvatar user={session.user} />
@@ -87,7 +89,9 @@ export default async function Home() {
           </>
         ) : (
           <>
-            <LogDialog />
+            <LogDialog>
+              <Button>{"Log today's mood"}</Button>
+            </LogDialog>
             <Spacer className="h-600 desktop:h-800" />
           </>
         )}

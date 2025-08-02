@@ -2,8 +2,19 @@ import Logo from '@/assets/images/logo.svg'
 import { LoginButtons } from '@/app/login/LoginButtons'
 import DisplayCard from '@/components/DisplayCard'
 import MagicLinkForm from '@/app/login/MagicLinkForm'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (session) {
+    redirect('/')
+  }
+
   return (
     <div className="flex min-h-dvh justify-center px-200 pt-1000 pb-800 tablet:px-400">
       <div className="flex max-w-full flex-col gap-400 tablet:grow-0 tablet:gap-600">

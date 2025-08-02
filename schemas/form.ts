@@ -38,3 +38,11 @@ export const formSchema = z.object({
   ...sleepSchema.shape,
 })
 export type FormDataType = z.infer<typeof formSchema>
+
+export type DataPoint = {
+  date: string
+} & FormDataType
+
+export type PartialDataPointWithDate = {
+  date: string
+} & Partial<DataPoint>

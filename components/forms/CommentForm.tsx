@@ -2,7 +2,7 @@ import { commentSchema, MAX_COMMENT_LENGTH } from '@/schemas/form'
 import { FormField, FormItem, FormMessage } from '@/components/ui/form'
 import GenericForm, { FormProps } from '@/components/forms/GenericForm'
 import { Label } from '@/components/ui/label'
-import { ComponentProps } from 'react'
+import { ComponentProps, useEffect, useRef } from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 
@@ -37,12 +37,23 @@ type CustomInputProps = {
 } & Omit<ComponentProps<typeof Textarea>, 'value'>
 
 function CustomInput({ value, hasError, ...props }: CustomInputProps) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.selectionStart = textareaRef.current.selectionEnd =
+        textareaRef.current.value.length
+    }
+  }, [])
+
   return (
     <div className="flex flex-col gap-y-100">
       <Textarea
         className="h-[150px]"
         placeholder="Today, I felt …"
+        value={value}
         {...props}
+        ref={textareaRef}
       />
       <span
         className={cn(

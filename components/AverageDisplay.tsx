@@ -14,7 +14,7 @@ export default function AverageDisplay({
   className?: string
 }) {
   return (
-    <DisplayCard className={cn('desktop:px-300 desktop:py-300', className)}>
+    <DisplayCard className={cn('tablet:px-300 tablet:py-300', className)}>
       <AverageTitleAndBox data={moodData} />
       <AverageTitleAndBox data={sleepData} />
     </DisplayCard>

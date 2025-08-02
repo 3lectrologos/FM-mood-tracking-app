@@ -10,9 +10,8 @@ import {
 } from '@/components/ui/dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import SleepForm from '@/components/forms/SleepForm'
-import { ComponentType, useState, useTransition } from 'react'
+import { ReactNode, useState, useTransition } from 'react'
 import MoodForm from '@/components/forms/MoodForm'
-import { Button } from '@/components/ui/button'
 import TagsForm from '@/components/forms/TagsForm'
 import CommentForm from '@/components/forms/CommentForm'
 import {
@@ -22,68 +21,112 @@ import {
   sleepSchema,
   tagsSchema,
 } from '@/schemas/form'
-import { Mood, Sleep } from '@/types'
-import { FormProps } from '@/components/forms/GenericForm'
-import { z } from 'zod'
 import { submitFormData } from '@/actions/dialog'
+import * as z from 'zod'
 
-type DialogStep<T extends z.ZodTypeAny> = {
-  name: string
-  component: ComponentType<FormProps<T>>
-}
+const defaultTitle = 'Log your mood'
 
-const dialogSteps = [
+export const availableFormSteps = [
   {
-    name: 'mood',
+    key: 'mood',
+    schema: moodSchema,
     component: MoodForm,
   },
   {
-    name: 'tags',
+    key: 'tags',
+    schema: tagsSchema,
     component: TagsForm,
   },
   {
-    name: 'comment',
+    key: 'comment',
+    schema: commentSchema,
     component: CommentForm,
   },
   {
-    name: 'sleep',
+    key: 'sleep',
+    schema: sleepSchema,
     component: SleepForm,
   },
-] as const satisfies readonly [
-  DialogStep<typeof moodSchema>,
-  DialogStep<typeof tagsSchema>,
-  DialogStep<typeof commentSchema>,
-  DialogStep<typeof sleepSchema>,
-]
+] as const
 
-const initValues = {
-  mood: 'neutral' as Mood,
-  tags: [],
-  comment: '',
-  sleep: '7-8' as Sleep,
+export type AvailableSteps = (typeof availableFormSteps)[number]
+export type AvailableKeys = AvailableSteps['key']
+export type FormStep<K extends AvailableKeys> = {
+  key: K
+  initValues: z.infer<Extract<AvailableSteps, { key: K }>['schema']>
 }
 
-export default function LogDialog() {
-  const [open, setOpen] = useState(false)
-  const [step, setStep] = useState<(typeof dialogSteps)[number]['name']>(
-    dialogSteps[0].name
+const fullFormSteps = [
+  {
+    key: 'mood',
+    initValues: { mood: 'neutral' },
+  },
+  {
+    key: 'tags',
+    initValues: { tags: [] },
+  },
+  {
+    key: 'comment',
+    initValues: { comment: '' },
+  },
+  {
+    key: 'sleep',
+    initValues: { sleep: '7-8' },
+  },
+] satisfies FormStep<AvailableKeys>[]
+
+export function findForm<K extends AvailableKeys>(
+  formSteps: readonly AvailableSteps[],
+  key: K
+): Extract<AvailableSteps, { key: K }> | undefined {
+  return formSteps.find(
+    (s): s is Extract<AvailableSteps, { key: K }> => s.key === key
   )
-  const [formData, setFormData] = useState<FormDataType>(initValues)
+}
+
+export function findStep<K extends AvailableKeys>(
+  formSteps: readonly FormStep<K>[],
+  key: K
+): Extract<FormStep<K>, { key: K }> | undefined {
+  return formSteps.find(
+    (s): s is Extract<FormStep<K>, { key: K }> => s.key === key
+  )
+}
+
+export default function LogDialog({
+  children,
+  title = defaultTitle,
+  formSteps = fullFormSteps,
+}: {
+  children: ReactNode
+  title?: string
+  formSteps: FormStep<AvailableKeys>[]
+}) {
+  const [open, setOpen] = useState(false)
+  const [step, setStep] = useState<(typeof formSteps)[number]['key']>(
+    formSteps[0].key
+  )
+  const [formData, setFormData] = useState<Partial<FormDataType>>(
+    {} as Partial<FormDataType>
+  )
   const [isPending, startTransition] = useTransition()
 
-  const progress = dialogSteps.findIndex((s) => s.name === step) + 1
-  const StepComponent = dialogSteps.find((s) => s.name === step)?.component
+  const progress = formSteps.findIndex((s) => s.key === step) + 1
+  const formStep = findForm(availableFormSteps, step)
+  if (!formStep) {
+    throw new Error(`Form step with key "${step}" not found in formSteps`)
+  }
 
   function handleClose() {
-    setStep(dialogSteps[0].name)
+    setStep(formSteps[0].key)
   }
 
   function handleComplete(values: Partial<FormDataType>) {
     const updatedValues = { ...formData, ...values }
     setFormData(updatedValues)
-    const nextStepIndex = dialogSteps.findIndex((s) => s.name === step) + 1
-    if (nextStepIndex < dialogSteps.length) {
-      setStep(dialogSteps[nextStepIndex].name)
+    const nextStepIndex = formSteps.findIndex((s) => s.key === step) + 1
+    if (nextStepIndex < formSteps.length) {
+      setStep(formSteps[nextStepIndex].key)
     } else {
       startTransition(async () => {
         await submitFormData(updatedValues)
@@ -94,27 +137,23 @@ export default function LogDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>{"Log today's mood"}</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
         onAnimationEnd={handleClose}
         className="max-h-[calc(100dvh-40px)] overflow-y-auto rounded-16 bg-light-gradient px-250 py-400 tablet:w-[600px] tablet:px-500 tablet:py-600"
       >
         <DialogHeader className="flex flex-col gap-y-400">
-          <DialogTitle className="txt-preset-2">Log your mood</DialogTitle>
+          <DialogTitle className="txt-preset-2">{title}</DialogTitle>
           <VisuallyHidden>
-            <DialogDescription>Log your mood</DialogDescription>
+            <DialogDescription>{title}</DialogDescription>
           </VisuallyHidden>
-          <Progress step={progress} total={dialogSteps.length} />
-          {StepComponent && (
-            <StepComponent
-              onComplete={handleComplete}
-              initValues={initValues}
-              isSubmit={progress === dialogSteps.length}
-              isPending={isPending}
-            />
-          )}
+          <Progress step={progress} total={formSteps.length} />
+          <formStep.component
+            onComplete={handleComplete}
+            initValues={findStep(formSteps, step)!.initValues}
+            isSubmit={progress === formSteps.length}
+            isPending={isPending}
+          />
         </DialogHeader>
       </DialogContent>
     </Dialog>

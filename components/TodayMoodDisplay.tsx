@@ -61,6 +61,7 @@ function MoodCard({ mood, className }: { mood: Mood; className?: string }) {
       </div>
       <EditButton
         className="absolute top-200 right-250 -mr-100 p-100 tablet:top-250 tablet:right-300"
+        title="Edit Mood"
         formSteps={[
           {
             key: 'mood',
@@ -83,6 +84,7 @@ function SleepCard({ sleep }: { sleep: Sleep }) {
         </div>
         <EditButton
           className="absolute top-200 right-250 -mr-100 p-100 tablet:top-250 tablet:right-300"
+          title="Edit Sleep"
           formSteps={[
             {
               key: 'sleep',
@@ -120,6 +122,7 @@ function ReflectionCard({ comment, tags }: { comment: string; tags: Tag[] }) {
       )}
       <EditButton
         className="absolute top-200 right-250 -mr-100 p-100 tablet:top-250 tablet:right-300"
+        title="Edit Reflection"
         formSteps={[
           {
             key: 'comment',

@@ -8,14 +8,16 @@ import LogDialog, { AvailableKeys, FormStep } from '@/components/LogDialog'
 export function EditButton({
   className,
   formSteps,
+  title = 'Edit',
 }: {
   className?: string
   formSteps: FormStep<AvailableKeys>[]
+  title?: string
 }) {
   return (
-    <LogDialog formSteps={formSteps} title="Edit">
+    <LogDialog formSteps={formSteps} title={title}>
       <Button className={cn('flex items-end', className)} variant="bare">
-        <FaPenToSquare className="size-4 text-neutral-300" />
+        <FaPenToSquare className="size-3.5 text-neutral-300" />
       </Button>
     </LogDialog>
   )

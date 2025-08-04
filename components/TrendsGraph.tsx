@@ -1,4 +1,4 @@
-import { PartialDataPointWithDate, sleepValues } from '@/types'
+import { sleepValues } from '@/types'
 import IconTriangle from '@/assets/images/icon-triangle.svg'
 import { cn, getMoodIcon } from '@/lib/utils'
 import {
@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/popover'
 import { RefObject, useEffect, useRef, useState } from 'react'
 import { format } from 'date-fns'
+import { PartialDataPointWithDate } from '@/schemas/form'
 
 export default function TrendsGraph({
   data,

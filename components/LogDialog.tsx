@@ -56,7 +56,7 @@ export type FormStep<K extends AvailableKeys> = {
   initValues: z.infer<Extract<AvailableSteps, { key: K }>['schema']>
 }
 
-const fullFormSteps = [
+export const fullFormSteps = [
   {
     key: 'mood',
     initValues: { mood: 'neutral' },
@@ -96,7 +96,7 @@ export function findStep<K extends AvailableKeys>(
 export default function LogDialog({
   children,
   title = defaultTitle,
-  formSteps = fullFormSteps,
+  formSteps,
 }: {
   children: ReactNode
   title?: string
@@ -150,7 +150,7 @@ export default function LogDialog({
           <Progress step={progress} total={formSteps.length} />
           <formStep.component
             onComplete={handleComplete}
-            initValues={findStep(formSteps, step)!.initValues}
+            initValues={findStep(formSteps, step)!.initValues as never}
             isSubmit={progress === formSteps.length}
             isPending={isPending}
           />

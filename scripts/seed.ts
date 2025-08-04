@@ -1,6 +1,6 @@
 import { db } from '@/drizzle/client'
 import { data } from '@/drizzle/schema'
-import { DataPoint } from '@/types'
+import { DataPoint } from '@/schemas/form'
 
 async function seedData() {
   console.log('Seeding data...')

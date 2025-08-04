@@ -23,19 +23,21 @@ export async function submitFormData(data: Partial<FormDataType>) {
       console.error('Validation error:', res.error)
       return { error: res.error.message }
     }
-    data = { ...todayData, ...data } as FormDataType
+    await insertTodayData({
+      values: { ...todayData, ...data },
+      userId: session.user.id,
+    })
   } else {
     const res = formSchema.safeParse(data)
     if (!res.success) {
       console.error('Validation error:', res.error)
       return { error: res.error.message }
     }
-    data = res.data as FormDataType
+    await insertTodayData({
+      values: res.data,
+      userId: session.user.id,
+    })
   }
 
-  await insertTodayData({
-    values: data,
-    userId: session.user.id,
-  })
   revalidatePath('/')
 }

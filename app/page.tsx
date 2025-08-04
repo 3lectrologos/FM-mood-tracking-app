@@ -6,7 +6,7 @@ import { AverageMood, AverageSleep } from '@/types'
 import TrendsDisplay from '@/components/TrendsDisplay'
 import { subDays } from 'date-fns'
 import TodayMoodDisplay from '@/components/TodayMoodDisplay'
-import LogDialog from '@/components/LogDialog'
+import LogDialog, { fullFormSteps } from '@/components/LogDialog'
 import { getRecentData, getTodayData } from '@/drizzle/queries'
 import { median, formatDate } from '@/lib/utils'
 import { auth } from '@/lib/auth'
@@ -89,7 +89,7 @@ export default async function Home() {
           </>
         ) : (
           <>
-            <LogDialog>
+            <LogDialog formSteps={fullFormSteps}>
               <Button>{"Log today's mood"}</Button>
             </LogDialog>
             <Spacer className="h-600 desktop:h-800" />

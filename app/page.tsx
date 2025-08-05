@@ -6,7 +6,7 @@ import { AverageMood, AverageSleep } from '@/types'
 import TrendsDisplay from '@/components/TrendsDisplay'
 import { subDays } from 'date-fns'
 import TodayMoodDisplay from '@/components/TodayMoodDisplay'
-import LogDialog, { fullFormSteps } from '@/components/LogDialog'
+import LogDialog, { FormStep } from '@/components/LogDialog'
 import { getRecentData, getTodayData } from '@/drizzle/queries'
 import { median, formatDate } from '@/lib/utils'
 import { auth } from '@/lib/auth'
@@ -19,6 +19,24 @@ import { PartialDataPointWithDate } from '@/schemas/form'
 
 const NUM_RECENT_DAYS = 11
 const NUM_DAYS_TO_MEDIAN = 5
+const fullFormSteps = [
+  {
+    key: 'mood',
+    initValues: { mood: 'neutral' },
+  },
+  {
+    key: 'tags',
+    initValues: { tags: [] },
+  },
+  {
+    key: 'comment',
+    initValues: { comment: '' },
+  },
+  {
+    key: 'sleep',
+    initValues: { sleep: '7-8' },
+  },
+] satisfies FormStep[]
 
 export default async function Home() {
   const cookieStore = await cookies()

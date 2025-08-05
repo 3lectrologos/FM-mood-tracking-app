@@ -58,25 +58,6 @@ export type FormStep = {
   }
 }[AvailableKeys]
 
-export const fullFormSteps = [
-  {
-    key: 'mood',
-    initValues: { mood: 'neutral' },
-  },
-  {
-    key: 'tags',
-    initValues: { tags: [] },
-  },
-  {
-    key: 'comment',
-    initValues: { comment: '' },
-  },
-  {
-    key: 'sleep',
-    initValues: { sleep: '7-8' },
-  },
-] satisfies FormStep[]
-
 export function findForm<K extends AvailableKeys>(
   formSteps: readonly AvailableSteps[],
   key: K

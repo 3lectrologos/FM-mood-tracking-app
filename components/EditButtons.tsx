@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { FaPenToSquare } from 'react-icons/fa6'
 import { cn } from '@/lib/utils'
-import LogDialog, { AvailableKeys, FormStep } from '@/components/LogDialog'
+import LogDialog, { FormStep } from '@/components/LogDialog'
 
 export function EditButton({
   className,
@@ -11,7 +11,7 @@ export function EditButton({
   title = 'Edit',
 }: {
   className?: string
-  formSteps: FormStep<AvailableKeys>[]
+  formSteps: FormStep[]
   title?: string
 }) {
   return (

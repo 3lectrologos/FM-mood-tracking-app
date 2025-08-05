@@ -51,10 +51,12 @@ export const availableFormSteps = [
 
 export type AvailableSteps = (typeof availableFormSteps)[number]
 export type AvailableKeys = AvailableSteps['key']
-export type FormStep<K extends AvailableKeys> = {
-  key: K
-  initValues: z.infer<Extract<AvailableSteps, { key: K }>['schema']>
-}
+export type FormStep = {
+  [S in AvailableSteps as S['key']]: {
+    key: S['key']
+    initValues: z.infer<S['schema']>
+  }
+}[AvailableKeys]
 
 export const fullFormSteps = [
   {
@@ -73,7 +75,7 @@ export const fullFormSteps = [
     key: 'sleep',
     initValues: { sleep: '7-8' },
   },
-] satisfies FormStep<AvailableKeys>[]
+] satisfies FormStep[]
 
 export function findForm<K extends AvailableKeys>(
   formSteps: readonly AvailableSteps[],
@@ -85,11 +87,11 @@ export function findForm<K extends AvailableKeys>(
 }
 
 export function findStep<K extends AvailableKeys>(
-  formSteps: readonly FormStep<K>[],
+  formSteps: readonly FormStep[],
   key: K
-): Extract<FormStep<K>, { key: K }> | undefined {
+): Extract<FormStep, { key: K }> | undefined {
   return formSteps.find(
-    (s): s is Extract<FormStep<K>, { key: K }> => s.key === key
+    (s): s is Extract<FormStep, { key: K }> => s.key === key
   )
 }
 
@@ -100,7 +102,7 @@ export default function LogDialog({
 }: {
   children: ReactNode
   title?: string
-  formSteps: FormStep<AvailableKeys>[]
+  formSteps: FormStep[]
 }) {
   const [open, setOpen] = useState(false)
   const [step, setStep] = useState<(typeof formSteps)[number]['key']>(

@@ -6,7 +6,7 @@ import { AverageMood, AverageSleep } from '@/types'
 import TrendsDisplay from '@/components/TrendsDisplay'
 import { subDays } from 'date-fns'
 import TodayMoodDisplay from '@/components/TodayMoodDisplay'
-import LogDialog, { FormStep } from '@/components/LogDialog'
+import { createLogDialog } from '@/components/LogDialog'
 import { getRecentData, getTodayData } from '@/drizzle/queries'
 import { median, formatDate } from '@/lib/utils'
 import { auth } from '@/lib/auth'
@@ -19,24 +19,6 @@ import { PartialDataPointWithDate } from '@/schemas/form'
 
 const NUM_RECENT_DAYS = 11
 const NUM_DAYS_TO_MEDIAN = 5
-const fullFormSteps = [
-  {
-    key: 'mood',
-    initValues: { mood: 'neutral' },
-  },
-  {
-    key: 'tags',
-    initValues: { tags: [] },
-  },
-  {
-    key: 'comment',
-    initValues: { comment: '' },
-  },
-  {
-    key: 'sleep',
-    initValues: { sleep: '7-8' },
-  },
-] satisfies FormStep[]
 
 export default async function Home() {
   const cookieStore = await cookies()
@@ -49,7 +31,27 @@ export default async function Home() {
     redirect('/login')
   }
 
+  const LogDialog = createLogDialog('mood', [
+    {
+      key: 'mood',
+      initValues: { mood: 'neutral' },
+    },
+    {
+      key: 'tags',
+      initValues: { tags: [] },
+    },
+    {
+      key: 'comment',
+      initValues: { comment: '' },
+    },
+    {
+      key: 'sleep',
+      initValues: { sleep: '7-8' },
+    },
+  ])
+
   const today = await getZonedToday()
+  const todayData = await getTodayData(session.user.id)
   const recentData = await getRecentData(session.user.id, NUM_RECENT_DAYS)
   const filledRecentData: PartialDataPointWithDate[] = Array.from(
     { length: NUM_RECENT_DAYS },
@@ -81,8 +83,6 @@ export default async function Home() {
     ),
   } as AverageSleep
 
-  const todayData = await getTodayData(session.user.id)
-
   if (!timezone) {
     return null
   }
@@ -107,7 +107,7 @@ export default async function Home() {
           </>
         ) : (
           <>
-            <LogDialog formSteps={fullFormSteps}>
+            <LogDialog title="Log your mood">
               <Button>{"Log today's mood"}</Button>
             </LogDialog>
             <Spacer className="h-600 desktop:h-800" />

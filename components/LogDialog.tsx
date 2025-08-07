@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import SleepForm from '@/components/forms/SleepForm'
-import { ReactNode, useState, useTransition } from 'react'
+import { ComponentType, ReactNode, useState, useTransition } from 'react'
 import MoodForm from '@/components/forms/MoodForm'
 import TagsForm from '@/components/forms/TagsForm'
 import CommentForm from '@/components/forms/CommentForm'
@@ -23,10 +23,16 @@ import {
 } from '@/schemas/form'
 import { submitFormData } from '@/actions/dialog'
 import * as z from 'zod'
+import { FormProps } from '@/components/forms/GenericForm'
 
-const defaultTitle = 'Log your mood'
+type FormStepType<S extends z.ZodTypeAny> = {
+  key: string
+  schema: S
+  component: ComponentType<FormProps<z.infer<S>>>
+}
+export type FormDef = FormStepType<z.ZodTypeAny>[]
 
-export const availableFormSteps = [
+const availableFormSteps = [
   {
     key: 'mood',
     schema: moodSchema,
@@ -47,43 +53,69 @@ export const availableFormSteps = [
     schema: sleepSchema,
     component: SleepForm,
   },
-] as const
+] as const satisfies FormDef
 
-export type AvailableSteps = (typeof availableFormSteps)[number]
-export type AvailableKeys = AvailableSteps['key']
-export type FormStep = {
-  [S in AvailableSteps as S['key']]: {
-    key: S['key']
-    initValues: z.infer<S['schema']>
+export type FormRegistry = {
+  mood: typeof availableFormSteps
+}
+
+type AvailableSteps<F extends FormDef> = F[number]
+type AvailableKeys<F extends FormDef> = AvailableSteps<F>['key']
+
+export type FormInit<F extends FormDef> = {
+  [K in keyof F]: {
+    key: F[K]['key']
+    initValues: z.infer<F[K]['schema']>
+    //component: ComponentType<FormProps<z.infer<A[K]['schema']>>>
   }
-}[AvailableKeys]
+}[number]
 
-export function findForm<K extends AvailableKeys>(
-  formSteps: readonly AvailableSteps[],
-  key: K
-): Extract<AvailableSteps, { key: K }> | undefined {
+export function findForm<F extends FormDef>(
+  formSteps: readonly AvailableSteps<F>[],
+  key: AvailableKeys<F>
+): Extract<AvailableSteps<F>, { key: AvailableKeys<F> }> | undefined {
   return formSteps.find(
-    (s): s is Extract<AvailableSteps, { key: K }> => s.key === key
+    (s): s is Extract<AvailableSteps<F>, { key: AvailableKeys<F> }> =>
+      s.key === key
   )
 }
 
-export function findStep<K extends AvailableKeys>(
-  formSteps: readonly FormStep[],
-  key: K
-): Extract<FormStep, { key: K }> | undefined {
+export function findStep<F extends FormDef>(
+  formSteps: readonly FormInit<F>[],
+  key: AvailableKeys<F>
+): Extract<FormInit<F>, { key: AvailableKeys<F> }> | undefined {
   return formSteps.find(
-    (s): s is Extract<FormStep, { key: K }> => s.key === key
+    (s): s is Extract<FormInit<F>, { key: AvailableKeys<F> }> => s.key === key
   )
 }
 
-export default function LogDialog({
+export function createLogDialog<N extends keyof FormRegistry>(
+  _name: N,
+  formSteps: readonly FormInit<FormRegistry[N]>[]
+) {
+  return function LogDialogComponent({
+    children,
+    title,
+  }: {
+    children: ReactNode
+    title: string
+  }) {
+    return (
+      <LogDialog<FormRegistry[N]> title={title} formSteps={formSteps}>
+        {children}
+      </LogDialog>
+    )
+  }
+}
+
+function LogDialog<F extends FormDef>({
   children,
-  title = defaultTitle,
+  title,
   formSteps,
 }: {
   children: ReactNode
-  title?: string
-  formSteps: FormStep[]
+  title: string
+  formSteps: readonly FormInit<F>[]
 }) {
   const [open, setOpen] = useState(false)
   const [step, setStep] = useState<(typeof formSteps)[number]['key']>(
@@ -133,7 +165,7 @@ export default function LogDialog({
           <Progress step={progress} total={formSteps.length} />
           <formStep.component
             onComplete={handleComplete}
-            initValues={findStep(formSteps, step)!.initValues as never}
+            initValues={findStep(formSteps, step)!.initValues}
             isSubmit={progress === formSteps.length}
             isPending={isPending}
           />

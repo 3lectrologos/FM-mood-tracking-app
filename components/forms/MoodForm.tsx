@@ -1,3 +1,5 @@
+'use client'
+
 import { moodValues } from '@/types'
 import { moodSchema } from '@/schemas/form'
 import {

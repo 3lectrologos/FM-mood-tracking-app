@@ -9,51 +9,11 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-import SleepForm from '@/components/forms/SleepForm'
-import { ComponentType, ReactNode, useState, useTransition } from 'react'
-import MoodForm from '@/components/forms/MoodForm'
-import TagsForm from '@/components/forms/TagsForm'
-import CommentForm from '@/components/forms/CommentForm'
-import {
-  commentSchema,
-  FormDataType,
-  moodSchema,
-  sleepSchema,
-  tagsSchema,
-} from '@/schemas/form'
+import { ReactNode, useState, useTransition } from 'react'
+import { FormDataType, formRegistry, FormRegistry } from '@/schemas/form'
 import { submitFormData } from '@/actions/dialog'
 import * as z from 'zod'
-import { FormProps } from '@/components/forms/GenericForm'
-
-type FormStepType<S extends z.ZodTypeAny> = {
-  schema: S
-  component: ComponentType<FormProps<z.infer<S>>>
-}
-export type FormDef = Record<string, FormStepType<z.ZodTypeAny>>
-
-const logFormDef = {
-  mood: {
-    schema: moodSchema,
-    component: MoodForm,
-  },
-  tags: {
-    schema: tagsSchema,
-    component: TagsForm,
-  },
-  comment: {
-    schema: commentSchema,
-    component: CommentForm,
-  },
-  sleep: {
-    schema: sleepSchema,
-    component: SleepForm,
-  },
-} as const satisfies FormDef
-
-const formRegistry = {
-  log: logFormDef,
-} as const satisfies Record<string, FormDef>
-export type FormRegistry = typeof formRegistry
+import { FormDef } from '@/types'
 
 type StepToInit<F extends FormDef> = {
   [K in keyof F]: F[K] extends { schema: infer S extends z.ZodTypeAny }
@@ -62,25 +22,6 @@ type StepToInit<F extends FormDef> = {
 }[keyof F]
 
 export type FormInit<N extends keyof FormRegistry> = StepToInit<FormRegistry[N]>
-
-export function createDialog<N extends keyof FormRegistry>(
-  name: N,
-  formSteps: readonly FormInit<NoInfer<N>>[]
-) {
-  return function LogDialogComponent({
-    children,
-    title,
-  }: {
-    children: ReactNode
-    title: string
-  }) {
-    return (
-      <GenericDialog name={name} title={title} formSteps={formSteps}>
-        {children}
-      </GenericDialog>
-    )
-  }
-}
 
 export function GenericDialog<N extends keyof FormRegistry>({
   children,

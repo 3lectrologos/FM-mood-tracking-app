@@ -1,3 +1,5 @@
+'use client'
+
 import { tagValues } from '@/types'
 import { tagsSchema } from '@/schemas/form'
 import { FormField, FormItem, FormMessage } from '@/components/ui/form'

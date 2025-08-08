@@ -1,3 +1,5 @@
+'use client'
+
 import { ComponentProps, createElement, FunctionComponent, useRef } from 'react'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { cn } from '@/lib/utils'

@@ -1,3 +1,5 @@
+'use client'
+
 import { sleepValues } from '@/types'
 import {
   FormControl,

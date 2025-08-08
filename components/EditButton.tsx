@@ -1,11 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { FaPenToSquare } from 'react-icons/fa6'
 import { cn } from '@/lib/utils'
-import {
-  FormInit,
-  FormRegistry,
-  GenericDialog,
-} from '@/components/GenericDialog'
+import { FormInit, GenericDialog } from '@/components/GenericDialog'
+import { FormRegistry } from '@/schemas/form'
 
 export default function EditButton<N extends keyof FormRegistry>({
   name,

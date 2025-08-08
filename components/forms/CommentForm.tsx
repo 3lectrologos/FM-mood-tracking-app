@@ -1,3 +1,5 @@
+'use client'
+
 import { commentSchema, MAX_COMMENT_LENGTH } from '@/schemas/form'
 import { FormField, FormItem, FormMessage } from '@/components/ui/form'
 import GenericForm, { FormProps } from '@/components/forms/GenericForm'

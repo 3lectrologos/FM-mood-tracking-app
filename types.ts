@@ -1,3 +1,7 @@
+import { ComponentType } from 'react'
+import { z } from 'zod'
+import { FormProps } from '@/components/forms/GenericForm'
+
 export const moodValues = [
   'very sad',
   'sad',
@@ -47,3 +51,9 @@ export type AverageSleep = {
 }
 
 export type AverageData = AverageMood | AverageSleep
+
+type FormStepType<S extends z.ZodTypeAny> = {
+  schema: S
+  component: ComponentType<FormProps<z.infer<S>>>
+}
+export type FormDef = Record<string, FormStepType<z.ZodTypeAny>>

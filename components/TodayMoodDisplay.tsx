@@ -36,7 +36,7 @@ export default function TodayMoodDisplay({
 function MoodCard({ mood, className }: { mood: Mood; className?: string }) {
   const Icon = getMoodIcon(mood, 'color')
   const moodText = `“${getMoodText(mood)}”`
-  const EditButton = createEditButton('mood', [
+  const EditButton = createEditButton('log', [
     {
       key: 'mood',
       initValues: { mood },
@@ -74,7 +74,7 @@ function MoodCard({ mood, className }: { mood: Mood; className?: string }) {
 }
 
 function SleepCard({ sleep }: { sleep: Sleep }) {
-  const EditButton = createEditButton('mood', [
+  const EditButton = createEditButton('log', [
     {
       key: 'sleep',
       initValues: { sleep },
@@ -99,7 +99,7 @@ function SleepCard({ sleep }: { sleep: Sleep }) {
 }
 
 function ReflectionCard({ comment, tags }: { comment: string; tags: Tag[] }) {
-  const EditButton = createEditButton('mood', [
+  const EditButton = createEditButton('log', [
     {
       key: 'comment',
       initValues: { comment },

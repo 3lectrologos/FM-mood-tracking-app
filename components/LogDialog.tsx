@@ -26,72 +26,46 @@ import * as z from 'zod'
 import { FormProps } from '@/components/forms/GenericForm'
 
 type FormStepType<S extends z.ZodTypeAny> = {
-  key: string
   schema: S
   component: ComponentType<FormProps<z.infer<S>>>
 }
-export type FormDef = FormStepType<z.ZodTypeAny>[]
+export type FormDef = Record<string, FormStepType<z.ZodTypeAny>>
 
-const availableFormSteps = [
-  {
-    key: 'mood',
+const logFormDef = {
+  mood: {
     schema: moodSchema,
     component: MoodForm,
   },
-  {
-    key: 'tags',
+  tags: {
     schema: tagsSchema,
     component: TagsForm,
   },
-  {
-    key: 'comment',
+  comment: {
     schema: commentSchema,
     component: CommentForm,
   },
-  {
-    key: 'sleep',
+  sleep: {
     schema: sleepSchema,
     component: SleepForm,
   },
-] as const satisfies FormDef
+} as const satisfies FormDef
 
-export type FormRegistry = {
-  mood: typeof availableFormSteps
-}
+const formRegistry = {
+  log: logFormDef,
+} as const satisfies Record<string, FormDef>
+export type FormRegistry = typeof formRegistry
 
-type AvailableSteps<F extends FormDef> = F[number]
-type AvailableKeys<F extends FormDef> = AvailableSteps<F>['key']
+type StepToInit<F extends FormDef> = {
+  [K in keyof F]: F[K] extends { schema: infer S extends z.ZodTypeAny }
+    ? { key: K; initValues: z.infer<S> }
+    : never
+}[keyof F]
 
-export type FormInit<F extends FormDef> = {
-  [K in keyof F]: {
-    key: F[K]['key']
-    initValues: z.infer<F[K]['schema']>
-    //component: ComponentType<FormProps<z.infer<A[K]['schema']>>>
-  }
-}[number]
-
-export function findForm<F extends FormDef>(
-  formSteps: readonly AvailableSteps<F>[],
-  key: AvailableKeys<F>
-): Extract<AvailableSteps<F>, { key: AvailableKeys<F> }> | undefined {
-  return formSteps.find(
-    (s): s is Extract<AvailableSteps<F>, { key: AvailableKeys<F> }> =>
-      s.key === key
-  )
-}
-
-export function findStep<F extends FormDef>(
-  formSteps: readonly FormInit<F>[],
-  key: AvailableKeys<F>
-): Extract<FormInit<F>, { key: AvailableKeys<F> }> | undefined {
-  return formSteps.find(
-    (s): s is Extract<FormInit<F>, { key: AvailableKeys<F> }> => s.key === key
-  )
-}
+export type FormInit<N extends keyof FormRegistry> = StepToInit<FormRegistry[N]>
 
 export function createLogDialog<N extends keyof FormRegistry>(
-  _name: N,
-  formSteps: readonly FormInit<FormRegistry[N]>[]
+  name: N,
+  formSteps: readonly FormInit<NoInfer<N>>[]
 ) {
   return function LogDialogComponent({
     children,
@@ -101,21 +75,23 @@ export function createLogDialog<N extends keyof FormRegistry>(
     title: string
   }) {
     return (
-      <LogDialog<FormRegistry[N]> title={title} formSteps={formSteps}>
+      <LogDialog name={name} title={title} formSteps={formSteps}>
         {children}
       </LogDialog>
     )
   }
 }
 
-function LogDialog<F extends FormDef>({
+function LogDialog<N extends keyof FormRegistry>({
   children,
   title,
+  name,
   formSteps,
 }: {
   children: ReactNode
   title: string
-  formSteps: readonly FormInit<F>[]
+  name: N
+  formSteps: readonly FormInit<NoInfer<N>>[]
 }) {
   const [open, setOpen] = useState(false)
   const [step, setStep] = useState<(typeof formSteps)[number]['key']>(
@@ -127,10 +103,10 @@ function LogDialog<F extends FormDef>({
   const [isPending, startTransition] = useTransition()
 
   const progress = formSteps.findIndex((s) => s.key === step) + 1
-  const formStep = findForm(availableFormSteps, step)
-  if (!formStep) {
-    throw new Error(`Form step with key "${step}" not found in formSteps`)
-  }
+
+  // TODO: Don't know how to type this properly
+  const FormComponent = formRegistry[name][step].component
+  const initValues = formSteps.find((s) => s.key === step)
 
   function handleClose() {
     setStep(formSteps[0].key)
@@ -163,9 +139,9 @@ function LogDialog<F extends FormDef>({
             <DialogDescription>{title}</DialogDescription>
           </VisuallyHidden>
           <Progress step={progress} total={formSteps.length} />
-          <formStep.component
+          <FormComponent
             onComplete={handleComplete}
-            initValues={findStep(formSteps, step)!.initValues}
+            initValues={initValues}
             isSubmit={progress === formSteps.length}
             isPending={isPending}
           />

@@ -31,7 +31,7 @@ export default async function Home() {
     redirect('/login')
   }
 
-  const LogDialog = createLogDialog('mood', [
+  const LogDialog = createLogDialog('log', [
     {
       key: 'mood',
       initValues: { mood: 'neutral' },

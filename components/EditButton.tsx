@@ -7,7 +7,7 @@ import { createLogDialog, FormInit, FormRegistry } from '@/components/LogDialog'
 
 export function createEditButton<N extends keyof FormRegistry>(
   name: N,
-  formSteps: readonly FormInit<FormRegistry[N]>[]
+  formSteps: readonly FormInit<N>[]
 ) {
   return function EditButtonComponent({
     className,
@@ -35,7 +35,7 @@ function EditButton<N extends keyof FormRegistry>({
 }: {
   name: N
   className?: string
-  formSteps: readonly FormInit<FormRegistry[N]>[]
+  formSteps: readonly FormInit<N>[]
   title: string
 }) {
   const LogDialog = createLogDialog(name, formSteps)

@@ -1,33 +1,13 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
 import { FaPenToSquare } from 'react-icons/fa6'
 import { cn } from '@/lib/utils'
-import { createLogDialog, FormInit, FormRegistry } from '@/components/LogDialog'
+import {
+  FormInit,
+  FormRegistry,
+  GenericDialog,
+} from '@/components/GenericDialog'
 
-export function createEditButton<N extends keyof FormRegistry>(
-  name: N,
-  formSteps: readonly FormInit<N>[]
-) {
-  return function EditButtonComponent({
-    className,
-    title,
-  }: {
-    className?: string
-    title: string
-  }) {
-    return (
-      <EditButton
-        className={className}
-        name={name}
-        formSteps={formSteps}
-        title={title}
-      />
-    )
-  }
-}
-
-function EditButton<N extends keyof FormRegistry>({
+export default function EditButton<N extends keyof FormRegistry>({
   name,
   className,
   formSteps,
@@ -35,16 +15,14 @@ function EditButton<N extends keyof FormRegistry>({
 }: {
   name: N
   className?: string
-  formSteps: readonly FormInit<N>[]
+  formSteps: readonly FormInit<NoInfer<N>>[]
   title: string
 }) {
-  const LogDialog = createLogDialog(name, formSteps)
-
   return (
-    <LogDialog title={title}>
+    <GenericDialog name={name} formSteps={formSteps} title={title}>
       <Button className={cn('flex items-end', className)} variant="bare">
         <FaPenToSquare className="size-3.5 text-neutral-300" />
       </Button>
-    </LogDialog>
+    </GenericDialog>
   )
 }

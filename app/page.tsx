@@ -6,7 +6,6 @@ import { AverageMood, AverageSleep } from '@/types'
 import TrendsDisplay from '@/components/TrendsDisplay'
 import { subDays } from 'date-fns'
 import TodayMoodDisplay from '@/components/TodayMoodDisplay'
-import { createLogDialog } from '@/components/LogDialog'
 import { getRecentData, getTodayData } from '@/drizzle/queries'
 import { median, formatDate } from '@/lib/utils'
 import { auth } from '@/lib/auth'
@@ -16,6 +15,7 @@ import UserAvatar from '@/components/header/UserAvatar'
 import { getZonedToday } from '@/lib/serverUtils'
 import { Button } from '@/components/ui/button'
 import { PartialDataPointWithDate } from '@/schemas/form'
+import { GenericDialog } from '@/components/GenericDialog'
 
 const NUM_RECENT_DAYS = 11
 const NUM_DAYS_TO_MEDIAN = 5
@@ -30,25 +30,6 @@ export default async function Home() {
   if (!session) {
     redirect('/login')
   }
-
-  const LogDialog = createLogDialog('log', [
-    {
-      key: 'mood',
-      initValues: { mood: 'neutral' },
-    },
-    {
-      key: 'tags',
-      initValues: { tags: [] },
-    },
-    {
-      key: 'comment',
-      initValues: { comment: '' },
-    },
-    {
-      key: 'sleep',
-      initValues: { sleep: '7-8' },
-    },
-  ])
 
   const today = await getZonedToday()
   const todayData = await getTodayData(session.user.id)
@@ -107,9 +88,7 @@ export default async function Home() {
           </>
         ) : (
           <>
-            <LogDialog title="Log your mood">
-              <Button>{"Log today's mood"}</Button>
-            </LogDialog>
+            <MoodLogDialog />
             <Spacer className="h-600 desktop:h-800" />
           </>
         )}
@@ -123,5 +102,34 @@ export default async function Home() {
         </div>
       </div>
     </div>
+  )
+}
+
+function MoodLogDialog() {
+  return (
+    <GenericDialog
+      title="Log your mood"
+      name="log"
+      formSteps={[
+        {
+          key: 'mood',
+          initValues: { mood: 'neutral' },
+        },
+        {
+          key: 'tags',
+          initValues: { tags: [] },
+        },
+        {
+          key: 'comment',
+          initValues: { comment: '' },
+        },
+        {
+          key: 'sleep',
+          initValues: { sleep: '7-8' },
+        },
+      ]}
+    >
+      <Button>{"Log today's mood"}</Button>
+    </GenericDialog>
   )
 }

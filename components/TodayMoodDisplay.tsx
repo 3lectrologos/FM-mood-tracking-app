@@ -5,7 +5,7 @@ import IconQuote from '@/assets/images/icon-quote.svg'
 import IconSleep from '@/assets/images/icon-sleep.svg'
 import IconReflection from '@/assets/images/icon-reflection.svg'
 import { DataPoint } from '@/schemas/form'
-import { createEditButton } from '@/components/EditButton'
+import EditButton from '@/components/EditButton'
 
 export default function TodayMoodDisplay({
   data,
@@ -36,12 +36,6 @@ export default function TodayMoodDisplay({
 function MoodCard({ mood, className }: { mood: Mood; className?: string }) {
   const Icon = getMoodIcon(mood, 'color')
   const moodText = `“${getMoodText(mood)}”`
-  const EditButton = createEditButton('log', [
-    {
-      key: 'mood',
-      initValues: { mood },
-    },
-  ])
 
   return (
     <DisplayCard
@@ -67,20 +61,20 @@ function MoodCard({ mood, className }: { mood: Mood; className?: string }) {
       </div>
       <EditButton
         className="absolute top-200 right-250 -mr-100 p-100 tablet:top-250 tablet:right-300"
+        name="log"
         title="Edit Mood"
+        formSteps={[
+          {
+            key: 'mood',
+            initValues: { mood },
+          },
+        ]}
       />
     </DisplayCard>
   )
 }
 
 function SleepCard({ sleep }: { sleep: Sleep }) {
-  const EditButton = createEditButton('log', [
-    {
-      key: 'sleep',
-      initValues: { sleep },
-    },
-  ])
-
   return (
     <DisplayCard className="relative gap-y-200 px-250 py-250 tablet:px-300 tablet:py-300">
       <div className="flex items-center justify-between">
@@ -90,7 +84,14 @@ function SleepCard({ sleep }: { sleep: Sleep }) {
         </div>
         <EditButton
           className="absolute top-200 right-250 -mr-100 p-100 tablet:top-250 tablet:right-300"
+          name="log"
           title="Edit Sleep"
+          formSteps={[
+            {
+              key: 'sleep',
+              initValues: { sleep },
+            },
+          ]}
         />
       </div>
       <span className="truncate txt-preset-3 text-[32px]">{sleep} hours</span>
@@ -99,17 +100,6 @@ function SleepCard({ sleep }: { sleep: Sleep }) {
 }
 
 function ReflectionCard({ comment, tags }: { comment: string; tags: Tag[] }) {
-  const EditButton = createEditButton('log', [
-    {
-      key: 'comment',
-      initValues: { comment },
-    },
-    {
-      key: 'tags',
-      initValues: { tags },
-    },
-  ])
-
   return (
     <DisplayCard className="relative flex-grow gap-y-200 px-250 py-250 tablet:px-300 tablet:py-300">
       <div className="flex items-center gap-x-150">
@@ -133,7 +123,18 @@ function ReflectionCard({ comment, tags }: { comment: string; tags: Tag[] }) {
       )}
       <EditButton
         className="absolute top-200 right-250 -mr-100 p-100 tablet:top-250 tablet:right-300"
+        name="log"
         title="Edit Reflection"
+        formSteps={[
+          {
+            key: 'comment',
+            initValues: { comment },
+          },
+          {
+            key: 'tags',
+            initValues: { tags },
+          },
+        ]}
       />
     </DisplayCard>
   )

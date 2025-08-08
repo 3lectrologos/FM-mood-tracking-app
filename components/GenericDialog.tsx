@@ -63,7 +63,7 @@ type StepToInit<F extends FormDef> = {
 
 export type FormInit<N extends keyof FormRegistry> = StepToInit<FormRegistry[N]>
 
-export function createLogDialog<N extends keyof FormRegistry>(
+export function createDialog<N extends keyof FormRegistry>(
   name: N,
   formSteps: readonly FormInit<NoInfer<N>>[]
 ) {
@@ -75,14 +75,14 @@ export function createLogDialog<N extends keyof FormRegistry>(
     title: string
   }) {
     return (
-      <LogDialog name={name} title={title} formSteps={formSteps}>
+      <GenericDialog name={name} title={title} formSteps={formSteps}>
         {children}
-      </LogDialog>
+      </GenericDialog>
     )
   }
 }
 
-function LogDialog<N extends keyof FormRegistry>({
+export function GenericDialog<N extends keyof FormRegistry>({
   children,
   title,
   name,
@@ -104,9 +104,9 @@ function LogDialog<N extends keyof FormRegistry>({
 
   const progress = formSteps.findIndex((s) => s.key === step) + 1
 
-  // TODO: Don't know how to type this properly
+  // @ts-expect-error TODO: Don't know how to type this properly
   const FormComponent = formRegistry[name][step].component
-  const initValues = formSteps.find((s) => s.key === step)
+  const initValues = formSteps.find((s) => s.key === step)!.initValues
 
   function handleClose() {
     setStep(formSteps[0].key)

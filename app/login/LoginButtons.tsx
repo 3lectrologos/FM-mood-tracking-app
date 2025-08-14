@@ -26,7 +26,11 @@ export function LoginButtons({ className }: { className?: string }) {
   }
 
   return (
-    <div className={cn('flex flex-col gap-250', className)}>
+    <section
+      className={cn('flex flex-col gap-250', className)}
+      aria-label="Third-party login options"
+    >
+      <h2 className="sr-only">Login options</h2>
       <Button
         className="h-12 gap-200 px-0 py-0 txt-preset-6"
         onClick={() => handleLogin('google')}
@@ -55,6 +59,6 @@ export function LoginButtons({ className }: { className?: string }) {
           </>
         )}
       </Button>
-    </div>
+    </section>
   )
 }

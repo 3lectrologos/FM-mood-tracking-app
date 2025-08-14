@@ -94,7 +94,12 @@ export default function MagicLinkForm() {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-075">
               <FormControl>
-                <Input placeholder="Your Name" {...field} aria-label="name" />
+                <Input
+                  placeholder="Your Name"
+                  {...field}
+                  aria-label="name"
+                  type="text"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -107,7 +112,12 @@ export default function MagicLinkForm() {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-075">
               <FormControl>
-                <Input placeholder="Your Email" {...field} aria-label="email" />
+                <Input
+                  placeholder="Your Email"
+                  {...field}
+                  aria-label="email"
+                  type="email"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

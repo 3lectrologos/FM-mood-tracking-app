@@ -70,7 +70,7 @@ export default async function Home() {
 
   return (
     <div className="flex min-h-dvh justify-center px-200 pt-400 pb-800 tablet:px-400 tablet:pt-500">
-      <div className="flex max-w-full min-w-[300px] flex-col items-center tablet:w-[733px] desktop:w-auto">
+      <main className="flex max-w-full min-w-[300px] flex-col items-center tablet:w-[733px] desktop:w-auto">
         <div className="flex w-full items-center justify-between">
           <Logo />
           <UserAvatar user={session.user} />
@@ -100,7 +100,7 @@ export default async function Home() {
           />
           <TrendsDisplay data={filledRecentData} />
         </div>
-      </div>
+      </main>
     </div>
   )
 }

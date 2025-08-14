@@ -1,12 +1,10 @@
 import PlaceholderIcon from '@/assets/images/avatar-placeholder.svg'
 import DropdownArrowIcon from '@/assets/images/icon-dropdown-arrow.svg'
-import SettingsIcon from '@/assets/images/icon-settings.svg'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
 import LogoutButton from '@/components/header/LogoutButton'
 import { auth } from '@/lib/auth'
 
@@ -39,13 +37,6 @@ export default async function UserAvatar({
           </span>
         </div>
         <div className="h-px w-full bg-blue-100" />
-        <Button
-          className="w-full items-center justify-start gap-125"
-          variant="bare"
-        >
-          <SettingsIcon className="size-4 shrink-0" />
-          <span className="truncate txt-preset-7">Settings</span>
-        </Button>
         <LogoutButton />
       </PopoverContent>
     </Popover>
